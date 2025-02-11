@@ -1,0 +1,170 @@
+/* Navbar - Estilo moderno */
+.navbar {
+  background-color: #333;
+  padding: 10px 0;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navbar .btn {
+  background-color: #fff;
+  color: #333;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.navbar .btn:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Container Principal - Centraliza o canvas */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin-top: 60px; /* Espaço para a navbar */
+}
+
+/* Canvas - Centralizado */
+.canvas-container {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilização dos modais */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.modal h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+/* Estilização dos inputs e botões */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.btn {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.btn-close {
+  background-color: #dc3545;
+}
+
+.btn-close:hover {
+  background-color: #c82333;
+}
+
+/* Efeito de fade-in para o modal */
+.modal.show {
+  display: flex;
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
+}
+/* Estilos para a régua */
+.ruler {
+  background-color: #000; /* Cor de fundo preta */
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%; /* A régua terá a mesma altura do canvas */
+  width: 50px; /* Largura da régua */
+  border-right: 2px solid #fff; /* Borda branca à direita da régua */
+}
+
+.ruler-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ruler-line {
+  width: 100%;
+  height: 1px;
+  border-top: 1px dashed white; /* Linhas pontilhadas brancas */
+}
+
+/* Para adicionar as marcas, você pode variar a altura da linha (exemplo de 1mm, 5mm, 10mm, etc.) */
+.ruler-line:nth-child(5n) {
+  height: 2px; /* As linhas a cada 5mm, por exemplo, podem ser mais largas */
+  border-top: 2px dashed white;
+}
+
+/* Ajuste as margens do canvas para que ele não sobreponha a régua */
+.canvas-container {
+  margin-left: 60px;
+  position: relative;
+}
+
+.zpl-output{
+  
+  margin-left: 658px;
+  position: relative;
+  
+
+}

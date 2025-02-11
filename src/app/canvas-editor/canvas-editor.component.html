@@ -1,0 +1,89 @@
+<!-- Navbar com os botões -->
+<nav class="navbar">
+  <div class="navbar-container">
+    <button class="btn" (click)="openTextModal()">Adicionar Texto</button>
+    <button class="btn" (click)="openImageModal()">Adicionar Imagem</button>
+    <button class="btn" (click)="generateZPL()">Gerar Código ZPL</button>
+    <button class="btn" (click)="generatePNG()">Gerar Imagem PNG</button>
+  </div>
+</nav>
+
+<!-- Container principal centralizado -->
+<div class="main-container" style="display: flex; position: relative;">
+  <!-- Régua em L -->
+  <div id="ruler" class="ruler">
+    <!-- Parte vertical da régua -->
+    <div class="ruler-vertical">
+      <div class="ruler-markers">
+        <div class="ruler-line" style="top: 0px;"></div>
+        <div class="ruler-line" style="top: 5px;"></div>
+        <div class="ruler-line" style="top: 10px;"></div>
+        <div class="ruler-line" style="top: 15px;"></div>
+        <div class="ruler-line" style="top: 20px;"></div>
+        <div class="ruler-line" style="top: 25px;"></div>
+        <div class="ruler-line" style="top: 30px;"></div>
+        <div class="ruler-line" style="top: 35px;"></div>
+        <div class="ruler-line" style="top: 40px;"></div>
+        <div class="ruler-line" style="top: 45px;"></div>
+        <div class="ruler-line" style="top: 50px;"></div>
+        <div class="ruler-line" style="top: 55px;"></div>
+        <div class="ruler-line" style="top: 60px;"></div>
+        <!-- Continue até a altura do seu canvas -->
+      </div>
+    </div>
+
+    <!-- Parte horizontal da régua -->
+    <div class="ruler-horizontal">
+      <div class="ruler-markers">
+        <div class="ruler-line" style="left: 0px;"></div>
+        <div class="ruler-line" style="left: 5px;"></div>
+        <div class="ruler-line" style="left: 10px;"></div>
+        <div class="ruler-line" style="left: 15px;"></div>
+        <div class="ruler-line" style="left: 20px;"></div>
+        <div class="ruler-line" style="left: 25px;"></div>
+        <div class="ruler-line" style="left: 30px;"></div>
+        <div class="ruler-line" style="left: 35px;"></div>
+        <div class="ruler-line" style="left: 40px;"></div>
+        <div class="ruler-line" style="left: 45px;"></div>
+        <div class="ruler-line" style="left: 50px;"></div>
+        <div class="ruler-line" style="left: 55px;"></div>
+        <div class="ruler-line" style="left: 60px;"></div>
+        <!-- Continue até a largura do seu canvas -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas onde os elementos são colocados -->
+  <div id="canvas" class="canvas-container">
+    <!-- Aqui você pode adicionar texto e imagens -->
+  </div>
+</div>
+
+<!-- Modal para adicionar texto -->
+<div id="text-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Adicionar Texto</h3>
+    <label for="textContent">Texto:</label>
+    <input type="text" [(ngModel)]="textContent" id="textContent" class="input-field" />
+    <label for="textSize">Tamanho do Texto:</label>
+    <input type="number" [(ngModel)]="textSize" id="textSize" class="input-field" />
+    <button class="btn" (click)="addText()">Adicionar Texto</button>
+    <button class="btn btn-close" (click)="closeTextModal()">Fechar</button>
+  </div>
+</div>
+
+<!-- Modal para adicionar imagem -->
+<div id="image-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Adicionar Imagem</h3>
+    <input type="file" (change)="onImageSelected($event)" class="input-field" />
+    <button class="btn" (click)="addImage()">Adicionar Imagem</button>
+    <button class="btn btn-close" (click)="closeImageModal()">Fechar</button>
+  </div>
+</div>
+
+<!-- Exibir o código ZPL gerado -->
+<div class="zpl-output">
+  <h3>Código ZPL Gerado:</h3>
+  <textarea [(ngModel)]="zpl" readonly></textarea>
+</div>
