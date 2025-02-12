@@ -1,0 +1,15 @@
+<button (click)="generateZPL()">Gerar ZPL</button>
+
+<!-- Modal para exibir o ZPL -->
+<div class="modal" [class.show]="showModal">
+  <div class="modal-content">
+    <h3>Código ZPL Gerado</h3>
+    <div class="modal-body">
+      <pre id="zplText">{{ zpl }}</pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-copy" (click)="copyZPL()">Copiar</button>
+      <button class="btn-close" (click)="closeModal()">Fechar</button>
+    </div>
+  </div>
+</div>

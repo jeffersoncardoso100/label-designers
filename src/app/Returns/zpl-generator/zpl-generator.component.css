@@ -1,0 +1,89 @@
+/* Estilo do Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Mostrar modal quando ativo */
+.modal.show {
+    display: flex;
+}
+
+/* Estilo do conteúdo do modal */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 500px; /* Largura fixa */
+    max-width: 90%; /* Evita ultrapassar a tela */
+    max-height: 80vh; /* Evita que o modal ultrapasse a altura da tela */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Corpo do modal com rolagem */
+.modal-body {
+    max-height: 300px; /* Define uma altura máxima */
+    overflow-y: auto; /* Habilita a rolagem vertical */
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: left;
+}
+
+/* Estilo para o código */
+pre {
+    white-space: pre-wrap; /* Permite quebras de linha automáticas */
+    word-wrap: break-word;
+    font-family: monospace;
+    background-color: #eef;
+    padding: 10px;
+    border-radius: 4px;
+    max-height: 250px; /* Define altura máxima para o conteúdo */
+    overflow-y: auto; /* Rolagem interna se necessário */
+}
+
+/* Estilo do botão */
+.btn-close {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-close:hover {
+    background-color: #c82333;
+}
+/* Rodapé do modal */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+/* Botão de copiar */
+.btn-copy {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-copy:hover {
+    background-color: #218838;
+}

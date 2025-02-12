@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // ✅ Importando CommonModule
+import { CommonModule } from '@angular/common'; 
 import { FormsModule } from '@angular/forms';
 import html2canvas from 'html2canvas';
 import { TextModalComponent } from '../tools/text-modal/text-modal.component';
 import { ImageModalComponent } from "../tools/image-modal/image-modal.component";
-
+import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
 @Component({
   selector: 'app-canvas-editor',
-  standalone: true, // Se estiver usando standalone, é necessário importar módulos aqui
-  imports: [CommonModule, FormsModule, TextModalComponent, ImageModalComponent], // ✅ Adicionado CommonModule
+  standalone: true, 
+  imports: [CommonModule, FormsModule, TextModalComponent, ImageModalComponent, ZplGeneratorComponent, MatButtonModule,
+    MatIconModule, PngGeneratorComponent], 
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css']
 })
@@ -24,6 +28,8 @@ export class CanvasEditorComponent {
   showTextModal: boolean = false;
   /**Modal de imagem*/
   showImageModal: boolean = false;
+  zplGenerator: any;
+zplContent: any;
 
   openTextModal(): void {
     this.showTextModal = true;
@@ -79,22 +85,20 @@ export class CanvasEditorComponent {
   }
 
   openImageModal(): void {
-    // const modalImage = document.getElementById('image-modal');
-    // if (modalImage) {
-    //   modalImage.style.display = 'block';
-    // }
-
+ 
     this.showImageModal = true
   }
 
   closeImageModal(): void {
-    // const modalImage = document.getElementById('image-modal');
-    // if (modalImage) {
-    //   modalImage.style.display = 'none';
-    // }
+  
     this.showImageModal = false
   }
 
+  generateZPL(): void {
+    if (this.zplGenerator) {
+      this.zplGenerator.generateZPL();
+    }
+  }
   onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input?.files?.length) {
@@ -123,44 +127,6 @@ export class CanvasEditorComponent {
     }
   }
 
-  generateZPL(): void {
-    console.log('iniciando');
-    let zpl = '^XA\n';
-
-    const canvas = document.getElementById('canvas');
-    if (canvas) {
-      const textElements = canvas.querySelectorAll('div');
-      textElements.forEach((text: HTMLElement) => {
-        const content = text.textContent || '';
-        const fontSize = parseInt(text.style.fontSize, 10);
-
-        const rect = text.getBoundingClientRect();
-        const canvasRect = canvas.getBoundingClientRect();
-
-        const top = Math.round(rect.top - canvasRect.top);
-        const left = Math.round(rect.left - canvasRect.left);
-
-        zpl += `^FO${left},${top}^A0N,${fontSize},${fontSize}^FD${content}^FS\n`;
-      });
-
-      const imageElements = canvas.querySelectorAll('img');
-      imageElements.forEach((img: HTMLImageElement) => {
-        const rect = img.getBoundingClientRect();
-        const canvasRect = canvas.getBoundingClientRect();
-
-        const top = Math.round(rect.top - canvasRect.top);
-        const left = Math.round(rect.left - canvasRect.left);
-
-        zpl += `^FO${left},${top}^GFA,100,100,10,${img.src}^FS\n`;
-      });
-    }
-
-    zpl += '^XZ';
-    this.zpl = zpl;
-
-    console.log('Código ZPL gerado:', this.zpl);
-  }
-
   generatePNG(): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
@@ -178,3 +144,6 @@ export class CanvasEditorComponent {
     a.click();
   }
 }
+
+
+
