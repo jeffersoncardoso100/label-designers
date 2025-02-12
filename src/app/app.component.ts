@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { CanvasEditorComponent } from "./canvas-editor/canvas-editor.component";
-import { FormsModule } from '@angular/forms'; // Importar o FormsModule
+import { FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,16 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'pixp';
+  title = 'Editor de Etiquetas';
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,8 @@
   </div>
 </nav>
 
+
+
 <!-- Container principal centralizado -->
 <div class="main-container" style="display: flex; position: relative;">
   <!-- Régua em L -->
@@ -58,8 +60,8 @@
     <!-- Aqui você pode adicionar texto e imagens -->
   </div>
 </div>
-
-<!-- Modal para adicionar texto -->
+<!-- 
+Modal para adicionar texto
 <div id="text-modal" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Adicionar Texto</h3>
@@ -70,7 +72,19 @@
     <button class="btn" (click)="addText()">Adicionar Texto</button>
     <button class="btn btn-close" (click)="closeTextModal()">Fechar</button>
   </div>
-</div>
+</div> -->
+
+
+<app-text-modal
+  *ngIf="showTextModal"
+  [textContent]="textContent"
+  [textSize]="textSize"
+  (textContentChange)="textContent = $event"
+  (textSizeChange)="textSize = $event"
+  (addTextEvent)="addText()"
+  (closeModalEvent)="closeTextModal()"
+></app-text-modal>
+
 
 <!-- Modal para adicionar imagem -->
 <div id="image-modal" class="modal" style="display: none;">

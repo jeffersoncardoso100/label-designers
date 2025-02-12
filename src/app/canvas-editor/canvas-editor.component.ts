@@ -1,34 +1,32 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // ✅ Importando CommonModule
 import { FormsModule } from '@angular/forms';
 import html2canvas from 'html2canvas';
+import { TextModalComponent } from '../tools/text-modal/text-modal.component';
 
 @Component({
   selector: 'app-canvas-editor',
-  imports: [FormsModule],
+  standalone: true, // Se estiver usando standalone, é necessário importar módulos aqui
+  imports: [CommonModule, FormsModule, TextModalComponent], // ✅ Adicionado CommonModule
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css']
 })
 export class CanvasEditorComponent {
   textContent: string = '';
-  textSize: number = 16;
+  textSize: number = 10;
   textTop: number = 100;
   textLeft: number = 100;
 
   imageUrl: string | null = null;
   zpl: string = '';
+  showTextModal: boolean = false;
 
   openTextModal(): void {
-    const modalText = document.getElementById('text-modal');
-    if (modalText) {
-      modalText.style.display = 'block';
-    }
+    this.showTextModal = true;
   }
 
   closeTextModal(): void {
-    const modalText = document.getElementById('text-modal');
-    if (modalText) {
-      modalText.style.display = 'none';
-    }
+    this.showTextModal = false;
   }
 
   addText(): void {
@@ -119,30 +117,25 @@ export class CanvasEditorComponent {
   }
 
   generateZPL(): void {
-    console.log('iniciando')
-    let zpl = '^XA\n';  // Início do código ZPL
+    console.log('iniciando');
+    let zpl = '^XA\n';
 
-    // Adicionar texto
     const canvas = document.getElementById('canvas');
     if (canvas) {
-      // Captura todos os elementos de texto (div) dentro do canvas
       const textElements = canvas.querySelectorAll('div');
       textElements.forEach((text: HTMLElement) => {
         const content = text.textContent || '';
         const fontSize = parseInt(text.style.fontSize, 10);
 
-        // Calcula as coordenadas relativas ao canvas
         const rect = text.getBoundingClientRect();
         const canvasRect = canvas.getBoundingClientRect();
 
         const top = Math.round(rect.top - canvasRect.top);
         const left = Math.round(rect.left - canvasRect.left);
 
-        // Adiciona o comando ZPL para o texto
         zpl += `^FO${left},${top}^A0N,${fontSize},${fontSize}^FD${content}^FS\n`;
       });
 
-      // Captura todos os elementos de imagem (img) dentro do canvas
       const imageElements = canvas.querySelectorAll('img');
       imageElements.forEach((img: HTMLImageElement) => {
         const rect = img.getBoundingClientRect();
@@ -151,15 +144,14 @@ export class CanvasEditorComponent {
         const top = Math.round(rect.top - canvasRect.top);
         const left = Math.round(rect.left - canvasRect.left);
 
-        // Adiciona o comando ZPL para a imagem (exemplo básico)
         zpl += `^FO${left},${top}^GFA,100,100,10,${img.src}^FS\n`;
       });
     }
 
-    zpl += '^XZ';  // Fim do código ZPL
-    this.zpl = zpl;  // Atualiza a variável zpl para exibir no textarea
+    zpl += '^XZ';
+    this.zpl = zpl;
 
-    console.log('Código ZPL gerado:', this.zpl);  // Exibe o ZPL no console para depuração
+    console.log('Código ZPL gerado:', this.zpl);
   }
 
   generatePNG(): void {
