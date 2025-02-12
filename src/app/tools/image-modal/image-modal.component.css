@@ -1,0 +1,78 @@
+/* Estilo do Modal */
+.modal {
+    position: fixed; /* Fixa o modal na tela */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    z-index: 9999; /* Garante que o modal esteja acima dos outros conteúdos */
+}
+  
+/* Estilo do conteúdo do modal */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; /* Tamanho do modal */
+    max-width: 100%; /* Para não ultrapassar a largura da tela */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+  
+/* Estilo do campo de input (arquivo) */
+.input-field {
+    margin: 10px 0;
+    padding: 8px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: none; /* Esconde o campo de input original */
+}
+
+/* Estilo do botão para escolher arquivo (substitui o input de arquivo padrão) */
+.custom-file-upload {
+    padding: 10px 20px;
+    background-color: #3cbe58;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 80%; /* Tamanho semelhante ao campo de input */
+    margin: 10px 0;
+    text-align: center;
+}
+
+.custom-file-upload i {
+    margin-right: 10px; /* Espaço entre o ícone e o texto */
+}
+
+.custom-file-upload:hover {
+    background-color: #0b5912;
+}
+
+/* Estilo do botão */
+.btn {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-close {
+    background-color: #dc3545;
+}
+
+.btn-close:hover {
+    background-color: #c82333;
+}

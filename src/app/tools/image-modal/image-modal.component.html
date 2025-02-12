@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="modal">
+    <div class="modal-content">
+      <h3>Adicionar Imagem</h3>
+      
+      <!-- Botão customizado com ícone para escolher arquivo -->
+      <label class="custom-file-upload">
+        <i class="fas fa-file-upload"></i> <!-- Ícone de upload de arquivo -->
+        <input type="file" (change)="onImageSelected($event)" class="input-field" />
+      </label>
+  
+      <button class="btn" (click)="addImage()">Adicionar Imagem</button>
+      <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    </div>
+  </div>
+  

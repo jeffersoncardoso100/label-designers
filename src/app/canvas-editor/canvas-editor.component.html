@@ -86,7 +86,7 @@ Modal para adicionar texto
 ></app-text-modal>
 
 
-<!-- Modal para adicionar imagem -->
+<!-- Modal para adicionar imagem
 <div id="image-modal" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Adicionar Imagem</h3>
@@ -94,7 +94,26 @@ Modal para adicionar texto
     <button class="btn" (click)="addImage()">Adicionar Imagem</button>
     <button class="btn btn-close" (click)="closeImageModal()">Fechar</button>
   </div>
-</div>
+</div> -->
+
+<app-text-modal
+  *ngIf="showTextModal"
+  [textContent]="textContent"
+  [textSize]="textSize"
+  (textContentChange)="textContent = $event"
+  (textSizeChange)="textSize = $event"
+  (addTextEvent)="addText()"
+  (closeModalEvent)="closeTextModal()"
+></app-text-modal>
+
+<app-image-modal
+  *ngIf="showImageModal"
+  [imageUrl]="imageUrl"
+  (imageUrlChange)="imageUrl = $event"
+  (addImageEvent)="addImage()"
+  (closeModalEvent)="closeImageModal()"
+></app-image-modal>
+
 
 <!-- Exibir o código ZPL gerado -->
 <div class="zpl-output">
