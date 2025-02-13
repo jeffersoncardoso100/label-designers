@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Botão de texto com Material Design -->
+    <button mat-raised-button color="primary" (click)="openTextModal()">Adicionar Texto</button>
+
+    <!-- Botão de imagem com Material Design -->
+    <button mat-raised-button color="accent" (click)="openImageModal()">Adicionar Imagem</button>
+
+    <!-- Botões para os geradores -->
+   
+      <app-zpl-generator></app-zpl-generator>
+      <app-png-generator></app-png-generator>
+    
+  </div>
+</nav>

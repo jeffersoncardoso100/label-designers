@@ -1,63 +1,203 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-import { FormsModule } from '@angular/forms';
-import html2canvas from 'html2canvas';
-import { TextModalComponent } from '../tools/text-modal/text-modal.component';
+// import { Component } from '@angular/core';
+// import { CommonModule } from '@angular/common'; 
+// import { FormsModule } from '@angular/forms';
+// import html2canvas from 'html2canvas';
+// import { TextModalComponent } from '../tools/text-modal/text-modal.component';
+// import { ImageModalComponent } from "../tools/image-modal/image-modal.component";
+// import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
+// import { MatButtonModule } from '@angular/material/button';
+// import { MatIconModule } from '@angular/material/icon';
+// import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
+// @Component({
+//   selector: 'app-canvas-editor',
+//   standalone: true, 
+//   imports: [CommonModule, FormsModule, TextModalComponent, ImageModalComponent, ZplGeneratorComponent, MatButtonModule,
+//     MatIconModule, PngGeneratorComponent], 
+//   templateUrl: './canvas-editor.component.html',
+//   styleUrls: ['./canvas-editor.component.css']
+// })
+// export class CanvasEditorComponent {
+//   textContent: string = '';
+//   textSize: number = 10;
+//   textTop: number = 100;
+//   textLeft: number = 100;
+
+//   imageUrl: string | null = null;
+//   zpl: string = '';
+//   /**Modal de texto */
+//   showTextModal: boolean = false;
+//   /**Modal de imagem*/
+//   showImageModal: boolean = false;
+//   zplGenerator: any;
+// zplContent: any;
+
+//   openTextModal(): void {
+//     this.showTextModal = true;
+//   }
+
+//   closeTextModal(): void {
+//     this.showTextModal = false;
+//   }
+
+//   addText(): void {
+//     const canvas = document.getElementById('canvas');
+//     if (canvas) {
+//       const text = document.createElement('div');
+//       text.textContent = this.textContent || 'Novo texto!';
+//       text.contentEditable = 'true';
+//       text.style.position = 'absolute';
+//       text.style.top = `${this.textTop}px`;
+//       text.style.left = `${this.textLeft}px`;
+//       text.style.fontSize = `${this.textSize}px`;
+//       text.style.cursor = 'move';
+
+//       text.addEventListener('mousedown', (event) => this.startDrag(event, text));
+
+//       canvas.appendChild(text);
+//       this.closeTextModal();
+//     }
+//   }
+
+//   startDrag(event: MouseEvent, text: HTMLElement): void {
+//     const offsetX = event.clientX - text.getBoundingClientRect().left;
+//     const offsetY = event.clientY - text.getBoundingClientRect().top;
+
+//     const onMouseMove = (moveEvent: MouseEvent) => {
+//       text.style.left = `${moveEvent.clientX - offsetX}px`;
+//       text.style.top = `${moveEvent.clientY - offsetY}px`;
+//     };
+
+//     const onMouseUp = () => {
+//       document.removeEventListener('mousemove', onMouseMove);
+//       document.removeEventListener('mouseup', onMouseUp);
+//     };
+
+//     document.addEventListener('mousemove', onMouseMove);
+//     document.addEventListener('mouseup', onMouseUp);
+//   }
+
+//   updateTextContent(newText: string): void {
+//     this.textContent = newText;
+//   }
+
+//   updateTextSize(newSize: number): void {
+//     this.textSize = newSize;
+//   }
+
+//   openImageModal(): void {
+ 
+//     this.showImageModal = true
+//   }
+
+//   closeImageModal(): void {
+  
+//     this.showImageModal = false
+//   }
+
+//   generateZPL(): void {
+//     if (this.zplGenerator) {
+//       this.zplGenerator.generateZPL();
+//     }
+//   }
+//   onImageSelected(event: Event): void {
+//     const input = event.target as HTMLInputElement;
+//     if (input?.files?.length) {
+//       const file = input.files[0];
+//       const reader = new FileReader();
+//       reader.onload = () => {
+//         this.imageUrl = reader.result as string;
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   }
+
+//   addImage(): void {
+//     if (this.imageUrl) {
+//       const img = document.createElement('img');
+//       img.src = this.imageUrl;
+//       img.style.position = 'absolute';
+//       img.style.top = '150px';
+//       img.style.left = '150px';
+//       img.style.width = '200px';
+
+//       const canvas = document.getElementById('canvas');
+//       if (canvas) {
+//         canvas.appendChild(img);
+//       }
+//     }
+//   }
+
+ 
+// }
+import { Component, OnInit } from '@angular/core';
+import { ModalService } from '../services/modal.service'; // Serviço para gerenciar o estado dos modais
 import { ImageModalComponent } from "../tools/image-modal/image-modal.component";
-import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
+import { TextModalComponent } from "../tools/text-modal/text-modal.component";
+import { CommonModule } from '@angular/common';
+import { SidebarComponent } from "../sidebar/sidebar.component";
+
 @Component({
   selector: 'app-canvas-editor',
-  standalone: true, 
-  imports: [CommonModule, FormsModule, TextModalComponent, ImageModalComponent, ZplGeneratorComponent, MatButtonModule,
-    MatIconModule, PngGeneratorComponent], 
   templateUrl: './canvas-editor.component.html',
-  styleUrls: ['./canvas-editor.component.css']
+  styleUrls: ['./canvas-editor.component.css'],
+  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent]
 })
-export class CanvasEditorComponent {
-  textContent: string = '';
-  textSize: number = 10;
-  textTop: number = 100;
-  textLeft: number = 100;
-
-  imageUrl: string | null = null;
-  zpl: string = '';
-  /**Modal de texto */
+export class CanvasEditorComponent implements OnInit {
+  // Variáveis para controlar a visibilidade dos modais
   showTextModal: boolean = false;
-  /**Modal de imagem*/
   showImageModal: boolean = false;
-  zplGenerator: any;
-zplContent: any;
 
+  constructor(private modalService: ModalService) { }
+
+  ngOnInit(): void {
+    // Subscrição para ouvir os eventos de mudança de estado do modal
+    this.modalService.modalState$.subscribe(state => {
+      // Manipula o estado para o modal de texto
+      if (state.modalType === 'text' && state.open) {
+        this.showTextModal = true;
+      } else if (state.modalType === 'text' && !state.open) {
+        this.showTextModal = false;
+      }
+
+      // Manipula o estado para o modal de imagem
+      if (state.modalType === 'image' && state.open) {
+        this.showImageModal = true;
+      } else if (state.modalType === 'image' && !state.open) {
+        this.showImageModal = false;
+      }
+    });
+  }
+
+  // Abre o modal de texto, acionando o ModalService
   openTextModal(): void {
-    this.showTextModal = true;
+    this.modalService.openModal('text', { content: '', size: 12 });
   }
 
-  closeTextModal(): void {
-    this.showTextModal = false;
+  // Abre o modal de imagem, acionando o ModalService
+  openImageModal(): void {
+    this.modalService.openModal('image', { imageUrl: null });
   }
 
-  addText(): void {
+  // Método para adicionar o texto ao canvas (usando os dados do modal)
+  addText(content: string, size: number): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
       const text = document.createElement('div');
-      text.textContent = this.textContent || 'Novo texto!';
+      text.textContent = content || 'Novo texto!';
       text.contentEditable = 'true';
       text.style.position = 'absolute';
-      text.style.top = `${this.textTop}px`;
-      text.style.left = `${this.textLeft}px`;
-      text.style.fontSize = `${this.textSize}px`;
+      text.style.top = '100px';
+      text.style.left = '100px';
+      text.style.fontSize = `${size}px`;
       text.style.cursor = 'move';
 
       text.addEventListener('mousedown', (event) => this.startDrag(event, text));
 
       canvas.appendChild(text);
-      this.closeTextModal();
     }
   }
 
+  // Método para mover o texto dentro do canvas
   startDrag(event: MouseEvent, text: HTMLElement): void {
     const offsetX = event.clientX - text.getBoundingClientRect().left;
     const offsetY = event.clientY - text.getBoundingClientRect().top;
@@ -76,74 +216,18 @@ zplContent: any;
     document.addEventListener('mouseup', onMouseUp);
   }
 
-  updateTextContent(newText: string): void {
-    this.textContent = newText;
-  }
-
-  updateTextSize(newSize: number): void {
-    this.textSize = newSize;
-  }
-
-  openImageModal(): void {
- 
-    this.showImageModal = true
-  }
-
-  closeImageModal(): void {
-  
-    this.showImageModal = false
-  }
-
-  generateZPL(): void {
-    if (this.zplGenerator) {
-      this.zplGenerator.generateZPL();
-    }
-  }
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input?.files?.length) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageUrl = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  addImage(): void {
-    if (this.imageUrl) {
+  // Método para adicionar uma imagem ao canvas (usando os dados do modal)
+  addImage(imageUrl: string): void {
+    const canvas = document.getElementById('canvas');
+    if (canvas && imageUrl) {
       const img = document.createElement('img');
-      img.src = this.imageUrl;
+      img.src = imageUrl;
       img.style.position = 'absolute';
       img.style.top = '150px';
       img.style.left = '150px';
       img.style.width = '200px';
 
-      const canvas = document.getElementById('canvas');
-      if (canvas) {
-        canvas.appendChild(img);
-      }
+      canvas.appendChild(img);
     }
-  }
-
-  generatePNG(): void {
-    const canvas = document.getElementById('canvas');
-    if (canvas) {
-      html2canvas(canvas).then((canvasElement) => {
-        const imgURL = canvasElement.toDataURL('image/png');
-        this.downloadImage(imgURL);
-      });
-    }
-  }
-
-  downloadImage(imageUrl: string): void {
-    const a = document.createElement('a');
-    a.href = imageUrl;
-    a.download = 'canvas_image.png';
-    a.click();
   }
 }
-
-
-

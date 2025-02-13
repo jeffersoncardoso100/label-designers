@@ -1,59 +1,8 @@
-<!-- Navbar com os botões -->
-<nav class="navbar">
-  <div class="navbar-container">
-    <!-- Botão de texto com Material Design -->
-    <button mat-raised-button color="primary" (click)="openTextModal()">Adicionar Texto</button>
+<div id="canvas" class="canvas-container">
+  <!-- Elementos de canvas (texto e imagem) são adicionados aqui -->
+</div>
 
-    <!-- Botão de imagem com Material Design -->
-    <button mat-raised-button color="accent" (click)="openImageModal()">Adicionar Imagem</button>
-
-    <!-- Botão do Gerador ZPL com Material Design -->
-    <app-zpl-generator></app-zpl-generator>
-
-    <app-png-generator></app-png-generator>
-  </div>
-</nav>
-
-
-
-
-  <!-- Canvas onde os elementos são colocados -->
-  <div id="canvas" class="canvas-container">
-    <!-- Aqui você pode adicionar texto e imagens -->
-  </div>
-
-
-
-
-<app-text-modal
-  *ngIf="showTextModal"
-  [textContent]="textContent"
-  [textSize]="textSize"
-  (textContentChange)="textContent = $event"
-  (textSizeChange)="textSize = $event"
-  (addTextEvent)="addText()"
-  (closeModalEvent)="closeTextModal()"
-></app-text-modal>
-
-
-
-
-<app-text-modal
-  *ngIf="showTextModal"
-  [textContent]="textContent"
-  [textSize]="textSize"
-  (textContentChange)="textContent = $event"
-  (textSizeChange)="textSize = $event"
-  (addTextEvent)="addText()"
-  (closeModalEvent)="closeTextModal()"
-></app-text-modal>
-
-<app-image-modal
-  *ngIf="showImageModal"
-  [imageUrl]="imageUrl"
-  (imageUrlChange)="imageUrl = $event"
-  (addImageEvent)="addImage()"
-  (closeModalEvent)="closeImageModal()"
-></app-image-modal>
-
-
+<!-- Modais são renderizados no template -->
+<app-text-modal *ngIf="showTextModal"></app-text-modal>
+<app-image-modal *ngIf="showImageModal"></app-image-modal>
+<app-sidebar></app-sidebar>

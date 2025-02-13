@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas';  // Importando a biblioteca html2canvas
   styleUrls: ['./png-generator.component.css']
 })
 export class PngGeneratorComponent {
+  png: any;
 
   generatePNG(): void {
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;

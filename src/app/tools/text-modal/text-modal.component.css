@@ -1,6 +1,7 @@
 
 /* Estilização dos modais */
 .modal {
+  margin-left: 465px;
     display: none;
     position: fixed;
     top: 0;

@@ -1,47 +1,27 @@
-/* Navbar - Estilo moderno */
-.navbar {
-  background-color: #333;
-  padding: 10px 0;
-  text-align: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
-
-.navbar-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.navbar .btn {
-  background-color: #fff;
-  color: #333;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-
-.navbar .btn:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-/* Container Principal - Centraliza o canvas */
+/* Container Principal - Ajusta o layout para respeitar a sidebar */
 .main-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Alinha ao início, levando em conta o espaço da sidebar */
   align-items: center;
   min-height: 100vh;
   margin-top: 60px; /* Espaço para a navbar */
 }
 
-/* Canvas - Centralizado */
+/* A sidebar terá uma largura fixa */
+.sidebar-container {
+  width: 420px; /* Ajuste conforme a largura da sua sidebar */
+  position: fixed; /* Sidebar fixa à esquerda */
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #333;
+  z-index: 1000;
+}
+
+/* Canvas - Centralizado no restante do espaço */
 .canvas-container {
+  margin-top:  40px;
+  margin-left: 320px; /* Espaço para a sidebar */
   position: relative;
   width: 800px;
   height: 600px;
@@ -51,7 +31,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilização dos modais */
+/* Estilos para os modais */
 .modal {
   display: none;
   position: fixed;
@@ -65,6 +45,7 @@
   z-index: 1000;
 }
 
+/* Outros estilos permanecem os mesmos */
 .modal-content {
   background-color: #fff;
   padding: 20px;
@@ -72,11 +53,6 @@
   width: 400px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
-}
-
-.modal h3 {
-  font-size: 20px;
-  margin-bottom: 15px;
 }
 
 /* Estilização dos inputs e botões */
@@ -123,48 +99,4 @@
 button:focus {
   outline: none;
   box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
-}
-/* Estilos para a régua */
-.ruler {
-  background-color: #000; /* Cor de fundo preta */
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%; /* A régua terá a mesma altura do canvas */
-  width: 50px; /* Largura da régua */
-  border-right: 2px solid #fff; /* Borda branca à direita da régua */
-}
-
-.ruler-markers {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.ruler-line {
-  width: 100%;
-  height: 1px;
-  border-top: 1px dashed white; /* Linhas pontilhadas brancas */
-}
-
-/* Para adicionar as marcas, você pode variar a altura da linha (exemplo de 1mm, 5mm, 10mm, etc.) */
-.ruler-line:nth-child(5n) {
-  height: 2px; /* As linhas a cada 5mm, por exemplo, podem ser mais largas */
-  border-top: 2px dashed white;
-}
-
-/* Ajuste as margens do canvas para que ele não sobreponha a régua */
-.canvas-container {
-  margin-left: 60px;
-  position: relative;
-}
-
-.zpl-output{
-  
-  margin-left: 658px;
-  position: relative;
-  
-
 }
