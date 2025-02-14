@@ -71,7 +71,7 @@ export class TextModalComponent implements OnInit {
   modalData: any = {};
 
   textContent: string = ''; 
-  textSize: number = 10; 
+  textSize: number = 40; 
 
   @Output() textContentChange = new EventEmitter<string>(); 
   @Output() textSizeChange = new EventEmitter<number>(); 

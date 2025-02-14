@@ -5,21 +5,14 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: 'Orbitron', sans-serif;
-    background-color: #121212; /* Dark background */
-    color: #fff;
-    margin-left: 250px; /* Compensar a largura da navbar */
-}
-
 /* Navbar */
 .navbar {
-    background: linear-gradient(135deg, rgba(50, 50, 50, 0.8), rgba(105, 105, 105, 0.8)); /* Gradiente metálico */
+    
     padding: 20px 0;
     position: fixed;
     top: 0;
     left: 0;
-    width: 250px; /* Largura da navbar maior */
+    width: 250px;
     height: 100%;
     z-index: 1000;
     display: flex;
@@ -27,8 +20,8 @@ body {
     justify-content: flex-start;
     align-items: center;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(15px); /* Efeito de vidro com mais desfoque */
-    border-right: 2px solid rgba(255, 255, 255, 0.15); /* Borda mais visível */
+    backdrop-filter: blur(15px); /* Efeito de vidro */
+    border-right: 2px solid rgba(255, 255, 255, 0.15);
     animation: gradientAnimation 10s ease infinite;
 }
 
@@ -45,44 +38,42 @@ body {
     }
 }
 
-/* Container dos Botões */
+/* Container dos links */
 .navbar-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     width: 100%;
     padding: 0 20px;
 }
 
-/* Estilo dos Links (Botões) */
+/* Estilo dos links */
 .navbar a {
-    background: rgba(50, 50, 50, 0.8); /* Fundo metálico com transparência */
-    border: none;
+    background: rgba(100, 99, 99, 0.8); /* Fundo metálico */
     color: #fff;
-    padding: 12px 20px;
+    padding: 12px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1.2rem;
     text-transform: uppercase;
     transition: all 0.3s ease;
     width: 100%;
     text-align: left;
     display: flex;
+    justify-content: flex-start;
     align-items: center;
     gap: 10px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
-    position: relative;
-    overflow: hidden;
 }
 
-/* Efeito de Hover nos Links */
+/* Efeito de hover nos links */
 .navbar a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
     transform: translateY(-5px) scale(1.05); /* Efeito de levitação */
 }
 
-/* Efeito de Onda ao Clicar */
+/* Efeito de onda ao clicar */
 .navbar a:after {
     content: '';
     position: absolute;
@@ -90,7 +81,7 @@ body {
     left: 50%;
     width: 5px;
     height: 5px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(11, 11, 11, 0.5);
     opacity: 0;
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(1);
@@ -103,30 +94,21 @@ body {
     transition: transform 0.5s, opacity 0.5s;
 }
 
-/* Ícones nos Links */
+/* Ícones */
 .navbar a i {
-    font-size: 18px;
-    margin-right: 10px;
+    font-size: 1.8rem;
 }
 
-/* Efeito de Foco (acessibilidade) */
+/* Foco nos links */
 .navbar a:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
-
-/* Conteúdo da Página */
-.content {
-    padding: 20px;
-    margin-top: 20px;
+.navbar a {
+    text-decoration: none; /* Garante que o texto não tenha sublinhado */
 }
 
-.content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-}
-
-.content p {
-    font-size: 1.2rem;
-    color: #ccc;
+.proto{
+    color: red;
+    margin-top: 125px;
 }

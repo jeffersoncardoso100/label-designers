@@ -248,4 +248,9 @@ export class CanvasEditorComponent implements OnInit {
       canvas.appendChild(img);
     }
   }
+  toggleSize(event: MouseEvent) {
+    const element = event.target as HTMLElement;
+    element.classList.toggle('expanded'); // Alterna a classe 'expanded' ao clicar
+  }
 }
+

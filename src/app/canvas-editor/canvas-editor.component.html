@@ -1,11 +1,15 @@
-<div id="canvas" class="canvas-container">
-  <!-- Elementos de canvas (texto e imagem) são adicionados aqui -->
-</div>
 
-<!-- Modais são renderizados no template -->
+<div id="canvas" class="canvas-container">
+  <!-- Elemento clicável -->
+  <div class="canvas-content" (click)="toggleSize($event)">
+   
+  </div>
+</div>
 <app-text-modal *ngIf="showTextModal"></app-text-modal>
 <app-image-modal *ngIf="showImageModal"></app-image-modal>
 <app-zpl-generator *ngIf="showZPLModal"></app-zpl-generator>
 <app-png-generator *ngIf="showPNGModal"></app-png-generator>
 
 <app-sidebar></app-sidebar>
+
+<!-- Modais são renderizados no template -->

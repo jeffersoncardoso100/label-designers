@@ -33,7 +33,7 @@
 
 /* Corpo do modal com rolagem */
 .modal-body {
-    max-height: 300px; /* Define uma altura máxima */
+    max-height: 200px; /* Define uma altura máxima */
     overflow-y: auto; /* Habilita a rolagem vertical */
     background-color: #f8f9fa;
     padding: 10px;
@@ -49,7 +49,7 @@ pre {
     background-color: #eef;
     padding: 10px;
     border-radius: 4px;
-    max-height: 250px; /* Define altura máxima para o conteúdo */
+    max-height: 150px; /* Define altura máxima para o conteúdo */
     overflow-y: auto; /* Rolagem interna se necessário */
 }
 
@@ -76,7 +76,7 @@ pre {
 
 /* Botão de copiar */
 .btn-copy {
-    background-color: #28a745;
+    background-color: #202120;
     color: white;
     border: none;
     padding: 10px;

@@ -1,28 +1,40 @@
 /* Estilo do Modal */
 .modal {
-    position: fixed; /* Fixa o modal na tela */
+    position: fixed;
+    margin-top: -239px;
+    margin-left: -37px;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
     display: flex;
-    justify-content: center; /* Centraliza o conteúdo horizontalmente */
-    align-items: center; /* Centraliza o conteúdo verticalmente */
+    justify-content: flex-end; /* Faz o modal começar no lado direito da tela */
+    align-items: flex-end; /* Centraliza o modal verticalmente */
     z-index: 9999; /* Garante que o modal esteja acima dos outros conteúdos */
 }
-  
+
+/* Fundo escurecido apenas à esquerda do modal */
+.modal .modal-background {
+    position: relative;
+    margin-top: 12px;
+    left: 0;
+    width: 100%; /* Preenche a tela inteira */
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
+    z-index: -1; /* Coloca o fundo atrás do modal */
+}
+
 /* Estilo do conteúdo do modal */
 .modal-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 400px; /* Tamanho do modal */
-    max-width: 100%; /* Para não ultrapassar a largura da tela */
+    width: 300px; /* Ajuste o tamanho conforme necessário */
+    max-width: 90%; /* Para garantir que o modal não ultrapasse a tela */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
-  
+
 /* Estilo do campo de input (arquivo) */
 .input-field {
     margin: 10px 0;
@@ -36,7 +48,7 @@
 /* Estilo do botão para escolher arquivo (substitui o input de arquivo padrão) */
 .custom-file-upload {
     padding: 10px 20px;
-    background-color: #3cbe58;
+    background-color: #383938;
     color: white;
     border: none;
     border-radius: 4px;
@@ -51,14 +63,14 @@
 }
 
 .custom-file-upload:hover {
-    background-color: #0b5912;
+    background-color: #2e2e2e; /* Um tom mais escuro no hover */
 }
 
-/* Estilo do botão */
+/* Estilização dos botões */
 .btn {
     padding: 10px 20px;
     margin: 10px;
-    background-color: #007bff;
+    background-color: #383938;
     color: white;
     border: none;
     border-radius: 4px;
@@ -66,13 +78,19 @@
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #2e2e2e; /* Um tom mais escuro no hover */
 }
 
 .btn-close {
-    background-color: #dc3545;
+    background-color: #ff4d4d; /* Um vermelho para o botão de fechar */
 }
 
 .btn-close:hover {
-    background-color: #c82333;
+    background-color: #cc0000; /* Vermelho mais escuro no hover */
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
 }
