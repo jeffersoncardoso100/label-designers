@@ -136,18 +136,20 @@ import { TextModalComponent } from "../tools/text-modal/text-modal.component";
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
+import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
 
 @Component({
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent]
+  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent]
 })
 export class CanvasEditorComponent implements OnInit {
   // Variáveis para controlar a visibilidade dos modais
   showTextModal: boolean = false;
   showImageModal: boolean = false;
   showZPLModal: boolean = false;
+  showPNGModal: boolean = false;
 
 
   constructor(private modalService: ModalService) { }
@@ -174,6 +176,12 @@ export class CanvasEditorComponent implements OnInit {
       } else if (state.modalType === 'zpl' && !state.open) {
         this.showZPLModal = false;
       }
+      if (state.modalType === 'png' && state.open) {
+        this.showPNGModal = true;
+      } else if (state.modalType === 'png' && !state.open) {
+        this.showPNGModal = false;
+      }
+
     });
   }
   

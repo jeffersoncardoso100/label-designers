@@ -9,27 +9,30 @@ body {
     font-family: 'Orbitron', sans-serif;
     background-color: #121212; /* Dark background */
     color: #fff;
-    margin-left: 220px; /* Compensar a largura da navbar */
+    margin-left: 250px; /* Compensar a largura da navbar */
 }
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(135deg, #000000, #b9babb);
+    background: linear-gradient(135deg, rgba(50, 50, 50, 0.8), rgba(105, 105, 105, 0.8)); /* Gradiente metálico */
     padding: 20px 0;
     position: fixed;
     top: 0;
     left: 0;
-    width: 200px;
+    width: 250px; /* Largura da navbar maior */
     height: 100%;
     z-index: 1000;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px); /* Efeito de vidro com mais desfoque */
+    border-right: 2px solid rgba(255, 255, 255, 0.15); /* Borda mais visível */
     animation: gradientAnimation 10s ease infinite;
 }
 
+/* Animação do gradiente */
 @keyframes gradientAnimation {
     0% {
         background-position: 0% 50%;
@@ -42,40 +45,45 @@ body {
     }
 }
 
-/* Container dos Links */
+/* Container dos Botões */
 .navbar-container {
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 20px;
 }
 
-/* Estilo dos Links */
-.nav-link {
-    text-decoration: none;
+/* Estilo dos Links (Botões) */
+.navbar a {
+    background: rgba(50, 50, 50, 0.8); /* Fundo metálico com transparência */
+    border: none;
     color: #fff;
     padding: 12px 20px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    text-transform: uppercase;
     transition: all 0.3s ease;
     width: 100%;
     text-align: left;
     display: flex;
     align-items: center;
     gap: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Efeitos de Hover e Foco */
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(117, 118, 118, 0.8);
-    transform: translateY(-3px);
+/* Efeito de Hover nos Links */
+.navbar a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px) scale(1.05); /* Efeito de levitação */
 }
 
 /* Efeito de Onda ao Clicar */
-.nav-link:after {
+.navbar a:after {
     content: '';
     position: absolute;
     top: 50%;
@@ -89,10 +97,22 @@ body {
     transition: opacity 0.3s, transform 0.3s;
 }
 
-.nav-link:active:after {
+.navbar a:active:after {
     opacity: 1;
     transform: translate(-50%, -50%) scale(50);
     transition: transform 0.5s, opacity 0.5s;
+}
+
+/* Ícones nos Links */
+.navbar a i {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+/* Efeito de Foco (acessibilidade) */
+.navbar a:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
 /* Conteúdo da Página */
@@ -110,31 +130,3 @@ body {
     font-size: 1.2rem;
     color: #ccc;
 }
-  /* Estilo para os botões */
-  button {
-    font-size: 14px; /* Tamanho da fonte */
-    text-transform: uppercase; /* Tornar o texto em maiúsculas */
-    padding: 8px 16px;
-    border-radius: 5px;
-    width: 100%; /* Faz os botões ocuparem toda a largura */
-    margin: 5px 0; /* Margem entre os botões */
-  }
-  
-  /* Botões com cor primária (Adicionar Texto) */
-  button[color="primary"] {
-    background-color: #343535; /* Cor primária do Material Design */
-    color: white;
-  }
-  
-  /* Botões com cor secundária (Adicionar Imagem) */
-  button[color="accent"] {
-    background-color: #343535; /* Cor de acento do Material Design */
-    color: white;
-  }
-  
-  /* Botões de Gerar ZPL e Gerar PNG */
-  button:not([color]) {
-    background-color: #343535; /* Cor verde para os geradores */
-    color: white;
-  }
-  

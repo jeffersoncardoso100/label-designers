@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import html2canvas from 'html2canvas';  // Importando a biblioteca html2canvas
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-png-generator',
@@ -8,6 +9,23 @@ import html2canvas from 'html2canvas';  // Importando a biblioteca html2canvas
 })
 export class PngGeneratorComponent {
   png: any;
+
+  showModal = false;
+
+  constructor(private modalService: ModalService) { }
+
+
+  ngOnInit(): void {
+    // Escutando mudanças de estado no serviço de modal
+    this.modalService.modalState$.subscribe(state => {
+      if (state.modalType === 'png' && state.open) {
+        this.showModal = true;
+        this.generatePNG();  // Gera o ZPL automaticamente quando o modal for aberto
+      } else {
+        this.showModal = false;
+      }
+    });
+  }
 
   generatePNG(): void {
     const canvasElement = document.getElementById('canvas') as HTMLCanvasElement;

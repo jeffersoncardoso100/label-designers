@@ -88,7 +88,8 @@ import { ModalService } from '../../services/modal.service';
 })
 export class ImageModalComponent implements OnInit {
   showModal: boolean = false;
-  modalData: any = {};
+  
+  modalData: any = { imageUrl: null };  // Garante que sempre existe um objeto
 
   constructor(private modalService: ModalService) { }
 
@@ -113,13 +114,18 @@ export class ImageModalComponent implements OnInit {
     if (input?.files?.length) {
       const file = input.files[0];
       const reader = new FileReader();
+  
       reader.onload = () => {
+        if (!this.modalData) {
+          this.modalData = { imageUrl: null }; // Garante que modalData existe
+        }
         this.modalData.imageUrl = reader.result as string;
       };
+  
       reader.readAsDataURL(file);
     }
   }
-
+  
   addImage(): void {
     if (this.modalData.imageUrl) {
       const canvas = document.getElementById('canvas');
