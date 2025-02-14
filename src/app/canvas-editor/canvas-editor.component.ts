@@ -135,20 +135,22 @@ import { ImageModalComponent } from "../tools/image-modal/image-modal.component"
 import { TextModalComponent } from "../tools/text-modal/text-modal.component";
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../sidebar/sidebar.component";
+import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
 
 @Component({
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent]
+  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent]
 })
 export class CanvasEditorComponent implements OnInit {
   // Variáveis para controlar a visibilidade dos modais
   showTextModal: boolean = false;
   showImageModal: boolean = false;
+  showZPLModal: boolean = false;
+
 
   constructor(private modalService: ModalService) { }
-
   ngOnInit(): void {
     // Subscrição para ouvir os eventos de mudança de estado do modal
     this.modalService.modalState$.subscribe(state => {
@@ -158,15 +160,23 @@ export class CanvasEditorComponent implements OnInit {
       } else if (state.modalType === 'text' && !state.open) {
         this.showTextModal = false;
       }
-
+  
       // Manipula o estado para o modal de imagem
       if (state.modalType === 'image' && state.open) {
         this.showImageModal = true;
       } else if (state.modalType === 'image' && !state.open) {
         this.showImageModal = false;
       }
+  
+      // Manipula o estado para o modal de ZPL
+      if (state.modalType === 'zpl' && state.open) {
+        this.showZPLModal = true;
+      } else if (state.modalType === 'zpl' && !state.open) {
+        this.showZPLModal = false;
+      }
     });
   }
+  
 
   // Abre o modal de texto, acionando o ModalService
   openTextModal(): void {
