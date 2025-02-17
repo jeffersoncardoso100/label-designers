@@ -26,4 +26,8 @@ export class SidebarComponent {
   openPngGenerator() {
     this.modalService.openModal('png');
   }
+  openBmpGenerator(){
+    this.modalService.openModal('bmp');
+
+  }
 }

@@ -137,12 +137,15 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
 import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
+import { BmpGeneratorComponent } from '../Returns/bmp-generator/bmp-generator.component';
 
 @Component({
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent]
+  imports: [ImageModalComponent, TextModalComponent,
+     CommonModule, SidebarComponent, ZplGeneratorComponent,
+      PngGeneratorComponent,BmpGeneratorComponent]
 })
 export class CanvasEditorComponent implements OnInit {
   // Variáveis para controlar a visibilidade dos modais
@@ -150,38 +153,45 @@ export class CanvasEditorComponent implements OnInit {
   showImageModal: boolean = false;
   showZPLModal: boolean = false;
   showPNGModal: boolean = false;
+  showBMPModal: boolean = false;
 
 
   constructor(private modalService: ModalService) { }
   ngOnInit(): void {
     // Subscrição para ouvir os eventos de mudança de estado do modal
     this.modalService.modalState$.subscribe(state => {
-      // Manipula o estado para o modal de texto
+      /** Manipula o estado para o modal de TEXTO */
       if (state.modalType === 'text' && state.open) {
         this.showTextModal = true;
       } else if (state.modalType === 'text' && !state.open) {
         this.showTextModal = false;
       }
   
-      // Manipula o estado para o modal de imagem
+   /** Manipula o estado para o modal de IMAGEM */
       if (state.modalType === 'image' && state.open) {
         this.showImageModal = true;
       } else if (state.modalType === 'image' && !state.open) {
         this.showImageModal = false;
       }
   
-      // Manipula o estado para o modal de ZPL
+      /** Manipula o estado para o modal de ZPL */
       if (state.modalType === 'zpl' && state.open) {
         this.showZPLModal = true;
       } else if (state.modalType === 'zpl' && !state.open) {
         this.showZPLModal = false;
       }
+      /** Manipula o estado para o modal de PNG */
       if (state.modalType === 'png' && state.open) {
         this.showPNGModal = true;
       } else if (state.modalType === 'png' && !state.open) {
         this.showPNGModal = false;
       }
-
+      /** Manipula o estado para o modal de BMP */
+      if (state.modalType === 'bmp' && state.open) {
+        this.showBMPModal = true;
+      } else if (state.modalType === 'bmp' && !state.open) {
+        this.showBMPModal = false;
+      }
     });
   }
   
