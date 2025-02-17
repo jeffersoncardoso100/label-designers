@@ -138,6 +138,7 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.component";
 import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
 import { BmpGeneratorComponent } from '../Returns/bmp-generator/bmp-generator.component';
+import { RulerComponent } from './ruler/ruler.component';
 
 @Component({
   selector: 'app-canvas-editor',
@@ -145,7 +146,7 @@ import { BmpGeneratorComponent } from '../Returns/bmp-generator/bmp-generator.co
   styleUrls: ['./canvas-editor.component.css'],
   imports: [ImageModalComponent, TextModalComponent,
      CommonModule, SidebarComponent, ZplGeneratorComponent,
-      PngGeneratorComponent,BmpGeneratorComponent]
+      PngGeneratorComponent,BmpGeneratorComponent,RulerComponent]
 })
 export class CanvasEditorComponent implements OnInit {
   // Variáveis para controlar a visibilidade dos modais

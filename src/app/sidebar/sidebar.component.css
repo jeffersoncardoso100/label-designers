@@ -1,13 +1,5 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 /* Navbar */
 .navbar {
-    
     padding: 20px 0;
     position: fixed;
     top: 0;
@@ -22,7 +14,8 @@
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(15px); /* Efeito de vidro */
     border-right: 2px solid rgba(255, 255, 255, 0.15);
-    animation: gradientAnimation 10s ease infinite;
+    background: rgba(0, 0, 0, 0.8); /* Cor fixa de fundo para a navbar */
+    animation: gradientAnimation 10s ease infinite; /* Apenas anima o gradiente do fundo */
 }
 
 /* Animação do gradiente */
@@ -50,7 +43,7 @@
 /* Estilo dos links */
 .navbar a {
     background: rgba(100, 99, 99, 0.8); /* Fundo metálico */
-    color: #fff;
+    color: #fff ;
     padding: 12px;
     border-radius: 8px;
     cursor: pointer;
@@ -108,7 +101,8 @@
     text-decoration: none; /* Garante que o texto não tenha sublinhado */
 }
 
-.proto{
+/* A classe "proto" é apenas para testar */
+.proto {
     color: red;
     margin-top: 125px;
 }

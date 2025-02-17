@@ -1,115 +1,155 @@
-/* Container Principal - Ajusta o layout para respeitar a sidebar */
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container Principal */
 .main-container {
- 
-  display: flex;
-  justify-content: flex-start; /* Alinha ao início, levando em conta o espaço da sidebar */
-  align-items: center;
-  min-height: 100vh;
-  margin-top: 60px; /* Espaço para a navbar */
+background-color: rgb(188, 192, 192);
+display: flex;
+justify-content: flex-start;
+align-items: center;
+min-height: 100vh;
+margin-top: 0;
+position: relative; /* Necessário para posicionar o fundo */
+padding-left: 10px;
+padding-right: 10px;
+flex-wrap: wrap;
+}
+
+/* Fundo antes do Canvas */
+.background-layer {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #cf2d2d;
+z-index: -1;
+opacity: 0.5;
 }
 
 /* Canvas - Design mais moderno com elementos quadriculados */
 .canvas-container {
-  margin-top: 90px;
-  margin-left: 290px; /* Espaço para a sidebar */
-  position: relative;
-  width: 800px;
-  height: 500px;
-  background-color: #ffffff; /* Fundo branco para aparência limpa */
-  border: 2px solid #e0e0e0; /* Borda suave e clara */
-  border-radius: 10px; /* Bordas levemente arredondadas */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Sombra refinada para um toque mais profissional */
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(to right, #ffffff, #f7f7f7); /* Gradiente sutil para o fundo */
+margin-top: 135px;
+margin-left: 319px;
+position: relative;
+width: 1000px;
+height: 800px;
+background-color: #ffffff;
+border: 2px solid #e0e0e0;
+border-radius: 10px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+overflow: hidden;
+display: flex;
+justify-content: center;
+align-items: center;
+background: linear-gradient(to right, #ffffff, #f7f7f7);
 }
 
 /* Adicionando grid (elementos quadriculados) com linhas maiores */
 .canvas-container::before {
-  content: "";
-  position: absolute; /* Garante que a grid fique atrás do conteúdo */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(0deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px), /* Ajustado para quadrados maiores */
-              repeating-linear-gradient(90deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px); /* Ajustado para quadrados maiores */
-  pointer-events: none; /* Não interfere com outros elementos */
-  opacity: 0.25; /* Opacidade ajustada para não sobrecarregar o design */
-  z-index: 0; /* Garantir que a grid fique atrás de tudo */
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: repeating-linear-gradient(0deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px),
+            repeating-linear-gradient(90deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px);
+pointer-events: none;
+opacity: 0.25;
+z-index: 0;
 }
 
-/* Elementos dentro do canvas, como textos ou imagens */
+/* Elementos dentro do canvas */
 .canvas-content {
-  position: relative;
-  z-index: 1; /* Garante que o conteúdo apareça acima da grid */
-  transition: width 0.3s ease; /* Transição suave para o aumento/diminuição de largura */
-  cursor: pointer; /* Indica que o elemento é clicável */
-  width: auto; /* Garantir que o conteúdo tenha largura automática inicialmente */
+position: relative;
+z-index: 1;
+transition: width 0.3s ease;
+cursor: pointer;
+width: auto;
 }
 
-/* Classe para expandir o elemento */
 .canvas-content.expanded {
-  width: 120%; /* Aumenta a largura do elemento */
+width: 120%;
 }
 
-/* Adicionando a caixinha vermelha */
+/* Caixinha vermelha para expandir */
 .expand-box {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: red;
-  border-radius: 4px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave para a caixinha */
-  z-index: 2; /* Garante que a caixinha esteja acima do conteúdo */
+position: absolute;
+bottom: 20px;
+right: 20px;
+width: 40px;
+height: 40px;
+background-color: red;
+border-radius: 4px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+z-index: 2;
 }
 
 .expand-box:hover {
-  background-color: darkred; /* Cor mais escura ao passar o mouse */
+background-color: darkred;
 }
 
-/* Efeito de hover para o canvas (borda mais intensa e sombra mais dramática) */
-.canvas-container:hover {
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2); /* Aumenta a intensidade da sombra */
-  border: 2px solid #dfdfdf; /* Borda mais visível ao passar o mouse */
-  transform: scale(1.03); /* Leve aumento de escala */
-}
-.resize-box {
-  position: absolute;
-  border: 2px solid #ccc;
-  cursor: pointer;
-  resize: both;
-  overflow: hidden;
-}
 
-.resize-handle {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 10px;
-  height: 10px;
-  cursor: pointer;
+
+/* Responsividade para telas pequenas */
+
+/* Para telas pequenas */
+@media (max-width: 768px) {
+.main-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.top-left { top: 0; left: 0; }
-.top-right { top: 0; right: 0; }
-.bottom-left { bottom: 0; left: 0; }
-.bottom-right { bottom: 0; right: 0; }
+.canvas-container {
+  width: 90vw;
+  height: 60vh;
+  margin-left: 0;
+  margin-top: 20px;
+}
 
-.content {
-  position: absolute;
+.canvas-content {
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-img {
+.expand-box {
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+}
+}
+
+/* Para telas muito pequenas, como celulares */
+@media (max-width: 480px) {
+.canvas-container {
+  width: 95vw;
+  height: 50vh;
+  margin-left: 0;
+}
+
+.canvas-content {
   width: 100%;
   height: 100%;
-  object-fit: contain;
 }
+
+.expand-box {
+  bottom: 10px;
+  right: 10px;
+  width: 25px;
+  height: 25px;
+}
+}
+
+
+
 

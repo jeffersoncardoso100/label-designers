@@ -1,0 +1,118 @@
+<div class="ruler-container">
+    <!-- Régua Horizontal -->
+    <div class="ruler ruler-horizontal" #horizontalRuler>
+      <div *ngFor="let mark of horizontalMarks" 
+           class="mark" 
+           [style.left.px]="mark">
+      </div>
+      <ng-container *ngFor="let mark of horizontalMarks">
+        <div *ngIf="mark % 50 === 0"
+             class="number" 
+             [style.left.px]="mark">
+          {{ mark }}
+        </div>
+      </ng-container>
+    </div>
+  
+    <!-- Régua Vertical -->
+    <div class="ruler ruler-vertical" #verticalRuler>
+      <div *ngFor="let mark of verticalMarks" 
+           class="mark" 
+           [style.top.px]="mark">
+      </div>
+      <ng-container *ngFor="let mark of verticalMarks">
+        <div *ngIf="mark % 50 === 0"
+             class="number" 
+             [style.top.px]="mark">
+          {{ mark }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  
+
+
+
+<!-- 
+  
+/*
+/* Contêiner da régua
+.ruler-container {
+    position: fixed;
+    z-index: 100;
+}
+
+/* Estilos gerais das réguas */
+.ruler {
+    background: #1c1c1c;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+}
+
+/* Régua horizontal */
+.ruler-horizontal {
+    top: 125px;
+    left: 40px;
+    width: calc(100% - 40px);
+    height: 40px;
+    border-bottom: 2px solid #e65c3a;
+    position: fixed;
+}
+
+/* Régua vertical */
+.ruler-vertical {
+    top: 0;
+    left: 285px;
+    width: 40px;
+    height: 100vh;
+    border-right: 2px solid #e65c3a;
+    position: fixed;
+}
+
+/* Marcas menores (traços pequenos) */
+.mark {
+    position: absolute;
+    background: #ffffff;
+}
+
+/* Marcas maiores (cada 50px) */
+.big-mark {
+    background: #e65c3a;
+}
+
+/* Posição das marcas na horizontal */
+.ruler-horizontal .mark {
+    width: 1px;
+    height: 10px;
+    bottom: 0;
+}
+
+/* Posição das marcas na vertical */
+.ruler-vertical .mark {
+    width: 10px;
+    height: 1px;
+    left: 0;
+}
+
+/* Números da régua */
+.number {
+    position: absolute;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Posição dos números na horizontal */
+.ruler-horizontal .number {
+    bottom: 10px;
+    transform: translateX(-50%);
+}
+
+/* Posição dos números na vertical */
+/* Posição das marcas na vertical */
+.ruler-vertical .mark {
+    width: 10px;
+    height: 1px;
+    right: 0; /* Alterado de left: 0; para right: 0; */
+}  -->

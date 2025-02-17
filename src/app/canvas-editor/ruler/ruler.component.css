@@ -1,0 +1,92 @@
+/* Variáveis CSS para controlar o posicionamento das réguas */
+:root {
+    --ruler-horizontal-start: 190px; /* Início da régua horizontal */
+    --ruler-horizontal-end: calc(100% - 40px); /* Fim da régua horizontal */
+    --ruler-vertical-start: 40px; /* Início da régua vertical (ajustado para 40px) */
+    --ruler-vertical-end: calc(100% - 40px); /* Fim da régua vertical */
+  }
+  
+  /* Contêiner que agrupa canvas e réguas */
+  .canvas-wrapper {
+    position: relative;
+    width: 1000px; /* ajuste conforme necessário */
+    height: 800px; /* ajuste conforme necessário */
+    overflow: hidden; /* recorta qualquer conteúdo que ultrapasse os limites */
+    border: 1px solid #ffffff; /* apenas para visualização */
+  }
+  
+  /* Contêiner das réguas – posicionado dentro do wrapper */
+  .ruler-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+  
+  /* Estilos gerais das réguas */
+  .ruler {
+    background: #1c1c1c;
+    color: #ae4c4c;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+  }
+  
+  /* Régua Horizontal */
+  .ruler-horizontal {
+    position: absolute;
+    top: 105px; /* fixa no topo do wrapper */
+    left: var(--ruler-horizontal-start); /* início da régua horizontal */
+    width: calc(var(--ruler-horizontal-end) - var(--ruler-horizontal-start)); /* largura da régua horizontal */
+    height: 40px;
+    border-bottom: 2px solid #e65c3a;
+  }
+  
+  /* Régua Vertical */
+  .ruler-vertical {
+    position: absolute;
+    top: 0;
+    left: 295px;
+    width: 40px;
+    height: 100%;
+    border-right: 2px solid #e65c3a;
+  }
+  
+  /* Marcas menores (traços pequenos) para ambas */
+  .mark {
+    position: absolute;
+    background: #2d0404;
+  }
+  
+  /* Marcas na Horizontal */
+  .ruler-horizontal .mark {
+    width: 1px;
+    height: 10px;
+    bottom: 0;
+  }
+  
+  /* Marcas na Vertical – todas à direita */
+  .ruler-vertical .mark {
+    width: 10px;
+    height: 1px;
+    right: 0;
+  }
+  
+  /* Números da régua */
+  .number {
+    position: absolute;
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  
+  /* Posição dos números na Horizontal */
+  .ruler-horizontal .number {
+    bottom: 10px;
+    transform: translateX(-50%);
+  }
+  
+  /* Posição dos números na Vertical */
+  .ruler-vertical .number {
+    right: 15px;
+    transform: translateY(-50%) rotate(-90deg);
+  }

@@ -1,10 +1,25 @@
 
-<div id="canvas" class="canvas-container">
-  <!-- Elemento clicável -->
-  <div class="canvas-content" (click)="toggleSize($event)">
-   
+<div class="main-container">
+  <!-- Fundo antes do Canvas -->
+  <div class="background-layer"></div>
+
+
+<app-ruler></app-ruler>
+
+<!-- 
+  <div class="ruler vertical-ruler"></div>
+  <div class="ruler horizontal-ruler"></div> -->
+
+
+  <!-- Canvas Container -->
+  <div id="canvas" class="canvas-container">
+    <!-- Elemento clicável dentro do canvas -->
+    <div class="canvas-content" (click)="toggleSize($event)">
+      <!-- Conteúdo do canvas -->
+    </div>
   </div>
 </div>
+
 <app-text-modal *ngIf="showTextModal"></app-text-modal>
 <app-image-modal *ngIf="showImageModal"></app-image-modal>
 <app-zpl-generator *ngIf="showZPLModal"></app-zpl-generator>
