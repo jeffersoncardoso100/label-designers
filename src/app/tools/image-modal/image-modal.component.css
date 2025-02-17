@@ -1,54 +1,66 @@
-/* Estilo do Modal */
-.modal {
-    position: fixed;
-    margin-top: -239px;
-    margin-left: -37px;
+/* Estilização do Modal de Texto */
+.modal-text {
+    position: absolute; /* Garante que o modal fique dentro do container */
     top: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
+    background-color: rgba(231, 229, 229, 0.5); /* Fundo escurecido */
     display: flex;
-    justify-content: flex-end; /* Faz o modal começar no lado direito da tela */
-    align-items: flex-end; /* Centraliza o modal verticalmente */
+    justify-content: center; /* Centraliza o modal horizontalmente */
+    align-items: center; /* Centraliza o modal verticalmente */
     z-index: 9999; /* Garante que o modal esteja acima dos outros conteúdos */
+    opacity: 0; /* Inicialmente oculto */
+    transition: opacity 0.5s ease-in-out; /* Efeito suave ao abrir o modal */
 }
 
-/* Fundo escurecido apenas à esquerda do modal */
-.modal .modal-background {
-    position: relative;
-    margin-top: 12px;
-    left: 0;
-    width: 100%; /* Preenche a tela inteira */
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
-    z-index: -1; /* Coloca o fundo atrás do modal */
+/* Quando o modal estiver visível */
+.modal-text.show {
+    opacity: 1;
+    display: flex;
 }
 
-/* Estilo do conteúdo do modal */
-.modal-content {
+/* Estilo do conteúdo do modal de texto */
+.modal-text .modal-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 300px; /* Ajuste o tamanho conforme necessário */
+    width: 300px; /* Ajuste de largura para manter consistência */
     max-width: 90%; /* Para garantir que o modal não ultrapasse a tela */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-/* Estilo do campo de input (arquivo) */
+/* Título do modal */
+ h3 {
+    color: white; /* Alterado para branco */
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Estilo do label */
+label {
+    display: block; /* Faz com que o label ocupe toda a largura disponível */
+    font-size: 14px;
+    margin-bottom: 5px; /* Adiciona um pequeno espaço abaixo do label */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+/* Estilo do campo de input */
 .input-field {
     margin: 10px 0;
     padding: 8px;
     width: 80%;
     border: 1px solid #ccc;
     border-radius: 4px;
-    display: none; /* Esconde o campo de input original */
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 /* Estilo do botão para escolher arquivo (substitui o input de arquivo padrão) */
 .custom-file-upload {
     padding: 10px 20px;
-    background-color: #383938;
+    background-color: #646464;
     color: white;
     border: none;
     border-radius: 4px;
@@ -75,6 +87,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .btn:hover {
@@ -89,8 +102,22 @@
     background-color: #cc0000; /* Vermelho mais escuro no hover */
 }
 
-.modal.show {
+/* Efeito de fade-in para o modal */
+.modal-text.show {
     display: flex;
     opacity: 1;
     transition: opacity 0.5s ease-in;
+}
+
+/* Foco nos botões */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
+}
+
+/* Fundo do modal (opcional: Gradiente ou imagem) */
+
+/* Opção 1: Gradiente no fundo */
+.modal-text {
+    background: linear-gradient(to bottom, rgba(219, 64, 64, 0.7), rgba(0, 0, 0, 0.5)); /* Gradiente no fundo */
 }

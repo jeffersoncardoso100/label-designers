@@ -1,15 +1,8 @@
-
 <div class="main-container">
   <!-- Fundo antes do Canvas -->
   <div class="background-layer"></div>
 
-
-<app-ruler></app-ruler>
-
-<!-- 
-  <div class="ruler vertical-ruler"></div>
-  <div class="ruler horizontal-ruler"></div> -->
-
+  <app-ruler></app-ruler>
 
   <!-- Canvas Container -->
   <div id="canvas" class="canvas-container">
@@ -18,14 +11,15 @@
       <!-- Conteúdo do canvas -->
     </div>
   </div>
+
+  <app-sidebar></app-sidebar>
+
+  <!-- Container dos Modais na lateral direita -->
+  <div class="modals-container">
+    <app-text-modal *ngIf="showTextModal"></app-text-modal>
+    <app-image-modal *ngIf="showImageModal"></app-image-modal>
+    <app-zpl-generator *ngIf="showZPLModal"></app-zpl-generator>
+    <app-png-generator *ngIf="showPNGModal"></app-png-generator>
+    <app-bmp-generator *ngIf="showBMPModal"></app-bmp-generator>
+  </div>
 </div>
-
-<app-text-modal *ngIf="showTextModal"></app-text-modal>
-<app-image-modal *ngIf="showImageModal"></app-image-modal>
-<app-zpl-generator *ngIf="showZPLModal"></app-zpl-generator>
-<app-png-generator *ngIf="showPNGModal"></app-png-generator>
-<app-bmp-generator *ngIf="showBMPModal"> </app-bmp-generator>
-
-<app-sidebar></app-sidebar>
-
-<!-- Modais são renderizados no template -->

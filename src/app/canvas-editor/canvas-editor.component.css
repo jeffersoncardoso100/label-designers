@@ -7,149 +7,190 @@
 
 /* Container Principal */
 .main-container {
-background-color: rgb(188, 192, 192);
-display: flex;
-justify-content: flex-start;
-align-items: center;
-min-height: 100vh;
-margin-top: 0;
-position: relative; /* Necessário para posicionar o fundo */
-padding-left: 10px;
-padding-right: 10px;
-flex-wrap: wrap;
+  background-color: rgb(188, 192, 192);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  margin-top: 0;
+  position: relative; /* Necessário para posicionar o fundo */
+  padding-left: 10px;
+  padding-right: 10px;
+  flex-wrap: wrap;
 }
 
 /* Fundo antes do Canvas */
 .background-layer {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: #cf2d2d;
-z-index: -1;
-opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #cf2d2d;
+  z-index: -1;
+  opacity: 0.5;
 }
 
 /* Canvas - Design mais moderno com elementos quadriculados */
 .canvas-container {
-margin-top: 135px;
-margin-left: 319px;
-position: relative;
-width: 1000px;
-height: 800px;
-background-color: #ffffff;
-border: 2px solid #e0e0e0;
-border-radius: 10px;
-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-overflow: hidden;
-display: flex;
-justify-content: center;
-align-items: center;
-background: linear-gradient(to right, #ffffff, #f7f7f7);
+  margin-top: 135px;
+  margin-left: 319px;
+  position: relative;
+  width: 1000px;
+  height: 800px;
+  background-color: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #ffffff, #f7f7f7);
 }
 
 /* Adicionando grid (elementos quadriculados) com linhas maiores */
 .canvas-container::before {
-content: "";
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: repeating-linear-gradient(0deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px),
-            repeating-linear-gradient(90deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px);
-pointer-events: none;
-opacity: 0.25;
-z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px),
+              repeating-linear-gradient(90deg, #e0e0e0, #e0e0e0 2px, transparent 2px, transparent 20px);
+  pointer-events: none;
+  opacity: 0.25;
+  z-index: 0;
 }
 
 /* Elementos dentro do canvas */
 .canvas-content {
-position: relative;
-z-index: 1;
-transition: width 0.3s ease;
-cursor: pointer;
-width: auto;
+  position: relative;
+  z-index: 1;
+  transition: width 0.3s ease;
+  cursor: pointer;
+  width: auto;
 }
 
 .canvas-content.expanded {
-width: 120%;
+  width: 120%;
 }
 
 /* Caixinha vermelha para expandir */
 .expand-box {
-position: absolute;
-bottom: 20px;
-right: 20px;
-width: 40px;
-height: 40px;
-background-color: red;
-border-radius: 4px;
-cursor: pointer;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-z-index: 2;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .expand-box:hover {
-background-color: darkred;
+  background-color: darkred;
 }
 
+/* Container dos modais na lateral direita */
+.modals-container {
+  position: absolute;
+  right: 20px; /* Distância da borda direita */
+  top: 20px;   /* Distância do topo */
+  width: 300px; /* Largura da área para os modais */
+  max-height: calc(100vh - 40px); /* Limita a altura */
+  overflow-y: auto; /* Permite rolar se os modais excederem a altura */
+  background-color: rgba(255, 255, 255, 0.9); /* Fundo semitransparente */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
+/* Modais dentro do container */
+.modals-container app-text-modal,
+.modals-container app-image-modal,
+.modals-container app-zpl-generator,
+.modals-container app-png-generator,
+.modals-container app-bmp-generator {
+  margin-bottom: 20px;
+}
 
 /* Responsividade para telas pequenas */
-
-/* Para telas pequenas */
 @media (max-width: 768px) {
-.main-container {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-left: 0;
-  padding-right: 0;
-}
+  .main-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
 
-.canvas-container {
-  width: 90vw;
-  height: 60vh;
-  margin-left: 0;
-  margin-top: 20px;
-}
+  .canvas-container {
+    width: 90vw;
+    height: 60vh;
+    margin-left: 0;
+    margin-top: 20px;
+  }
 
-.canvas-content {
-  width: 100%;
-  height: 100%;
-}
+  .canvas-content {
+    width: 100%;
+    height: 100%;
+  }
 
-.expand-box {
-  bottom: 10px;
-  right: 10px;
-  width: 30px;
-  height: 30px;
-}
+  .expand-box {
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .modals-container {
+    width: 250px; /* Ajuste para telas menores */
+  }
 }
 
 /* Para telas muito pequenas, como celulares */
 @media (max-width: 480px) {
-.canvas-container {
-  width: 95vw;
-  height: 50vh;
-  margin-left: 0;
+  .canvas-container {
+    width: 95vw;
+    height: 50vh;
+    margin-left: 0;
+  }
+
+  .canvas-content {
+    width: 100%;
+    height: 100%;
+  }
+
+  .expand-box {
+    bottom: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .modals-container {
+    width: 200px; /* Ajuste para celulares */
+  }
 }
-
-.canvas-content {
-  width: 100%;
-  height: 100%;
+.modals-container {
+  position: absolute; /* Garante que fique sobreposto ao conteúdo */
+  top: 140px;
+  right: 8px; /* Certifique-se de adicionar 'px' */
+  width: 27vw; /* Ajuste conforme necessário */
+  height: 100vh; /* Ocupa toda a altura da tela */
+  background: rgba(0, 0, 0, 0.8); /* Cor fixa de fundo para a navbar */
+  padding: 20px;
+  border-radius: 0px; /* Mantém o design de painel */
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 1000; /* Garante que fique sobre o conteúdo */
+  
+  /* Adiciona a borda laranja na esquerda */
+  border-left: 4px solid rgb(238, 53, 28);
 }
-
-.expand-box {
-  bottom: 10px;
-  right: 10px;
-  width: 25px;
-  height: 25px;
-}
-}
-
-
-
-

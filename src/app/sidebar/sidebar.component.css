@@ -11,11 +11,14 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    
+    /* Estilização */
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(15px); /* Efeito de vidro */
-    border-right: 2px solid rgba(255, 255, 255, 0.15);
     background: rgba(0, 0, 0, 0.8); /* Cor fixa de fundo para a navbar */
-    animation: gradientAnimation 10s ease infinite; /* Apenas anima o gradiente do fundo */
+
+    /* Adicionando a borda na direita */
+    border-right: 4px solid rgb(238, 53, 28);
 }
 
 /* Animação do gradiente */
@@ -42,6 +45,7 @@
 
 /* Estilo dos links */
 .navbar a {
+    border-left: px solid rgb(238, 53, 28);
     background: rgba(100, 99, 99, 0.8); /* Fundo metálico */
     color: #fff ;
     padding: 12px;
