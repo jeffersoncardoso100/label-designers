@@ -1,61 +1,4 @@
-// import { Component, EventEmitter, Input, Output } from '@angular/core';
-// import { FormsModule } from '@angular/forms';
 
-// @Component({
-//   selector: 'app-text-modal',
-//   imports: [FormsModule],
-//   templateUrl: './text-modal.component.html',
-//   styleUrls: ['./text-modal.component.css']
-// })
-// export class TextModalComponent {
-//   /** Texto que será mostrado no modal */
-//   @Input() textContent: string = '';
-
-//   /** Tamanho da fonte do texto */
-//   @Input() textSize: number = 10;
-
-//   /** Emissor de evento para atualizar o conteúdo do texto no componente pai */
-//   @Output() textContentChange = new EventEmitter<string>();
-
-//   /** Emissor de evento para atualizar o tamanho do texto no componente pai */
-//   @Output() textSizeChange = new EventEmitter<number>();
-
-//   /** Emissor de evento para notificar que o texto foi adicionado */
-//   @Output() addTextEvent = new EventEmitter<void>();
-
-//   /** Emissor de evento para notificar que o modal foi fechado */
-//   @Output() closeModalEvent = new EventEmitter<void>();
-
-//   /** 
-//    * Atualiza o conteúdo do texto e emite a alteração para o componente pai
-//    * @param value O novo conteúdo do texto
-//    */
-//   public updateTextContent(value: string): void {
-//     this.textContentChange.emit(value); // Emite o novo valor do texto
-//   }
-
-//   /** 
-//    * Atualiza o tamanho da fonte do texto e emite a alteração para o componente pai
-//    * @param value O novo tamanho da fonte
-//    */
-//   public updateTextSize(value: number): void {
-//     this.textSizeChange.emit(Number(value)); // Emite o novo valor do tamanho
-//   }
-
-//   /** 
-//    * Emite um evento para adicionar o texto
-//    */
-//   public addText(): void {
-//     this.addTextEvent.emit(); // Notifica que o texto foi adicionado
-//   }
-
-//   /** 
-//    * Emite um evento para fechar o modal
-//    */
-//   public closeModal(): void {
-//     this.closeModalEvent.emit(); // Notifica que o modal deve ser fechado
-//   }
-// }import { Component } from '@angular/core';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
@@ -83,12 +26,15 @@ export class TextModalComponent implements OnInit {
     this.modalService.modalState$.subscribe(state => {
       if (state.modalType === 'text' && state.open) {
         this.modalData = state.data;
+        this.textContent = this.modalData.content || ''; // Garantir que o conteúdo do texto seja carregado
+        this.textSize = this.modalData.size || 40; // Garantir que o tamanho seja carregado
         this.showModal = true;
       } else if (state.modalType === 'text' && !state.open) {
         this.showModal = false;
       }
     });
   }
+  
 
   closeModal(): void {
     this.modalService.closeModal();
@@ -147,8 +93,29 @@ export class TextModalComponent implements OnInit {
     this.textContentChange.emit(newText);
   }
 
-  onTextSizeChange(newSize: number): void {
-    this.textSize = newSize;
-    this.textSizeChange.emit(newSize);
+  onTextSizeChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    if (inputElement) {
+      this.textSize = Number(inputElement.value);
+      this.textSizeChange.emit(this.textSize);
+    }
   }
-}
+  
+  // Atualiza o tamanho do texto quando o usuário digita diretamente o valor
+  onTextSizeChangeManual(value: string): void {
+    const newSize = Number(value);
+    if (!isNaN(newSize) && newSize >= 10 && newSize <= 200) {
+      this.textSize = newSize;
+      this.textSizeChange.emit(this.textSize);
+    }
+  }
+  
+  // Retorna a cor dinâmica do slider
+  getSliderBackground(): string {
+    const percentage = ((this.textSize - 10) / (200 - 10)) * 100;
+    return `linear-gradient(90deg, 
+            #ff0000 0%, 
+            #ff9900 ${percentage / 3}%, 
+            #33cc33 ${percentage}%)`;
+  }
+}  

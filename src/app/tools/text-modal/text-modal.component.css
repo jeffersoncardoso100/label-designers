@@ -1,3 +1,6 @@
+
+
+
 /* Estilização do Modal de Texto */
 .modal-text {
   position: absolute; /* Garante que o modal fique dentro do container */
@@ -103,4 +106,37 @@ label {
 button:focus {
   outline: none;
   box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
+}
+
+.slider {
+  width: 80%;
+  margin: 20px 0;
+  appearance: none;
+  height: 7px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #eeebe7;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background: #383938;
+  border-radius: 50%;
+  cursor: pointer;
 }

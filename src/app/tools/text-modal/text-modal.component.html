@@ -1,12 +1,43 @@
 <div id="text-modal" class="modal" style="display: block;">
   <div class="modal-content">
     <h3>Adicionar Texto</h3>
+    
     <label for="textContent">Texto:</label>
-    <input type="text" [(ngModel)]="textContent" (ngModelChange)="textContentChange.emit($event)" id="textContent" class="input-field" />
-    
-    <label for="textSize">Tamanho do Texto:</label>
-    <input type="number" [(ngModel)]="textSize" (ngModelChange)="textSizeChange.emit($event)" id="textSize" class="input-field" />
-    
+    <input 
+      type="text" 
+      [(ngModel)]="textContent" 
+      (ngModelChange)="textContentChange.emit($event)" 
+      id="textContent" 
+      class="input-field" 
+    />
+
+    <!-- Controle do tamanho do texto -->
+    <label for="textSize">Tamanho do Texto: {{ textSize }}px</label>
+
+    <!-- Slider dinâmico -->
+    <input 
+      type="range" 
+      min="10" 
+      max="200" 
+      step="1" 
+      [(ngModel)]="textSize" 
+      (input)="onTextSizeChange($event)" 
+      [style.background]="getSliderBackground()" 
+      id="textSizeSlider" 
+      class="slider" 
+    />
+
+    <!-- Input numérico para digitar o tamanho -->
+    <input 
+      type="number" 
+      min="10" 
+      max="200" 
+      [(ngModel)]="textSize" 
+      (ngModelChange)="onTextSizeChangeManual($event)" 
+      id="textSizeInput" 
+      class="input-field"
+    />
+
     <button class="btn" (click)="addText()">Adicionar Texto</button>
     <button class="btn btn-close" (click)="closeModal()">Fechar</button>
   </div>
