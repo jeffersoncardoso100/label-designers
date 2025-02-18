@@ -38,6 +38,39 @@
       class="input-field"
     />
 
+    <!-- Controle de estilos -->
+    <div class="text-styles">
+      <!-- Negrito -->
+      <label>
+        <input 
+          type="checkbox" 
+          [checked]="textStyleService.getBold()" 
+          (change)="onBoldChange($event)" 
+        />
+        Negrito
+      </label>
+      
+      <!-- Itálico -->
+      <label>
+        <input 
+          type="checkbox" 
+          [checked]="textStyleService.getItalic()" 
+          (change)="onItalicChange($event)" 
+        />
+        Itálico
+      </label>
+
+      <!-- Sublinhado -->
+      <label>
+        <input 
+          type="checkbox" 
+          [checked]="textStyleService.getUnderline()" 
+          (change)="onUnderlineChange($event)" 
+        />
+        Sublinhado
+      </label>
+    </div>
+
     <button class="btn" (click)="addText()">Adicionar Texto</button>
     <button class="btn btn-close" (click)="closeModal()">Fechar</button>
   </div>

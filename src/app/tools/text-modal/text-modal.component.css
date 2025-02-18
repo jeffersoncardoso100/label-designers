@@ -140,3 +140,30 @@ button:focus {
   border-radius: 50%;
   cursor: pointer;
 }
+
+.text-styles {
+  background-color: #575656;  /* Fundo cinza escuro */
+  padding: 10px;            /* Espaçamento interno */
+  border-radius: 8px;       /* Bordas arredondadas */
+  display: flex;            /* Exibe os elementos na mesma linha */
+  gap: 40px;                /* Espaçamento entre os checkboxes */
+  color: #fff;              /* Texto branco */
+  margin-top: 20px;  
+  min-width: 150px;         /* Largura mínima */
+  max-width: 360px;         /* Largura máxima */
+  
+}
+
+.text-styles label {
+  font-size: 16px;          /* Tamanho da fonte */
+  cursor: pointer;         /* Cursor de mão para interação */
+}
+
+.text-styles input[type="checkbox"] {
+  margin-right: px;        /* Espaço entre o checkbox e o texto */
+}
+
+.text-styles label:hover {
+  text-decoration: underline;  /* Adiciona sublinhado quando passa o mouse */
+}
+

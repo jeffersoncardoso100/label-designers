@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GeneratorService } from './generator.service';
+import { TextStyleService } from './text-style.service';
 
-describe('GeneratorService', () => {
-  let service: GeneratorService;
+describe('TextStyleService', () => {
+  let service: TextStyleService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GeneratorService);
+    service = TestBed.inject(TextStyleService);
   });
 
   it('should be created', () => {

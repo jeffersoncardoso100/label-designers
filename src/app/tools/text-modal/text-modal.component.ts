@@ -1,7 +1,7 @@
-
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
+import { TextStyleService } from '../../services/text-style.service'; // Importe o serviço
 
 @Component({
   selector: 'app-text-modal',
@@ -19,7 +19,11 @@ export class TextModalComponent implements OnInit {
   @Output() textContentChange = new EventEmitter<string>(); 
   @Output() textSizeChange = new EventEmitter<number>(); 
 
-  constructor(private modalService: ModalService) { }
+  // Torne o serviço público para que possa ser acessado no template
+  constructor(
+    private modalService: ModalService, 
+    public textStyleService: TextStyleService // Mudança para "public"
+  ) { }
 
   ngOnInit(): void {
     // Ouvir os eventos do serviço de modal
@@ -34,7 +38,6 @@ export class TextModalComponent implements OnInit {
       }
     });
   }
-  
 
   closeModal(): void {
     this.modalService.closeModal();
@@ -44,50 +47,64 @@ export class TextModalComponent implements OnInit {
     const canvas = document.getElementById('canvas');
     if (canvas) {
       const text = document.createElement('div');
-      // Agora usamos diretamente o textContent e textSize do componente
-      text.textContent = this.textContent || 'Texto padrão';  // Usa a variável de texto
+      text.textContent = this.textContent || 'Texto padrão';
       text.style.position = 'absolute';
-      text.style.top = '150px';  // Ajuste conforme necessário
-      text.style.left = '150px';  // Ajuste conforme necessário
-      text.style.fontSize = `${this.textSize || 10}px`;  // Usa a variável de tamanho de fonte
-  
-      text.style.cursor = 'move';  // Para indicar que o elemento pode ser movido
-  
-      // Variáveis para controlar o movimento
+      text.style.top = '150px'; 
+      text.style.left = '150px';
+      text.style.fontSize = `${this.textSize || 10}px`;  
+
+      // Aplica os estilos através do serviço
+      if (this.textStyleService.getBold()) {
+        text.style.fontWeight = 'bold';
+      }
+      if (this.textStyleService.getItalic()) {
+        text.style.fontStyle = 'italic';
+      }
+      if (this.textStyleService.getUnderline()) {
+        text.style.textDecoration = 'underline';
+      }
+
+      text.style.cursor = 'move'; 
+
       let offsetX: number = 0;
       let offsetY: number = 0;
       let isMoving = false;
-  
-      // Adiciona o evento de mouse para iniciar o movimento
+
       text.addEventListener('mousedown', (event: MouseEvent) => {
         isMoving = true;
         offsetX = event.clientX - parseInt(text.style.left || '0', 10);
         offsetY = event.clientY - parseInt(text.style.top || '0', 10);
-        text.style.cursor = 'grabbing';  // Mudar cursor durante o movimento
+        text.style.cursor = 'grabbing';  
       });
-  
-      // Atualiza a posição do elemento enquanto está sendo movido
+
       document.addEventListener('mousemove', (event: MouseEvent) => {
         if (isMoving) {
           text.style.left = `${event.clientX - offsetX}px`;
           text.style.top = `${event.clientY - offsetY}px`;
         }
       });
-  
-      // Para o movimento quando o mouse é solto
+
       document.addEventListener('mouseup', () => {
         isMoving = false;
-        text.style.cursor = 'move';  // Restaura o cursor
+        text.style.cursor = 'move'; 
       });
-  
-      canvas.appendChild(text);  // Adiciona o texto ao canvas
-    }
-    this.closeModal();  // Fecha o modal
-  }
-  
-  
 
-  // Emitir eventos quando o conteúdo ou tamanho do texto mudar
+      canvas.appendChild(text); 
+    }
+  }
+
+  onBoldChange(event: Event): void {
+    this.textStyleService.setBold((event.target as HTMLInputElement).checked);
+  }
+
+  onItalicChange(event: Event): void {
+    this.textStyleService.setItalic((event.target as HTMLInputElement).checked);
+  }
+
+  onUnderlineChange(event: Event): void {
+    this.textStyleService.setUnderline((event.target as HTMLInputElement).checked);
+  }
+
   onTextContentChange(newText: string): void {
     this.textContent = newText;
     this.textContentChange.emit(newText);
@@ -101,7 +118,6 @@ export class TextModalComponent implements OnInit {
     }
   }
   
-  // Atualiza o tamanho do texto quando o usuário digita diretamente o valor
   onTextSizeChangeManual(value: string): void {
     const newSize = Number(value);
     if (!isNaN(newSize) && newSize >= 10 && newSize <= 200) {
@@ -109,8 +125,7 @@ export class TextModalComponent implements OnInit {
       this.textSizeChange.emit(this.textSize);
     }
   }
-  
-  // Retorna a cor dinâmica do slider
+
   getSliderBackground(): string {
     const percentage = ((this.textSize - 10) / (200 - 10)) * 100;
     return `linear-gradient(90deg, 
@@ -118,4 +133,4 @@ export class TextModalComponent implements OnInit {
             #ff9900 ${percentage / 3}%, 
             #33cc33 ${percentage}%)`;
   }
-}  
+}
