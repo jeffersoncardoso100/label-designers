@@ -1,11 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
-import { TextStyleService } from '../../services/text-style.service'; // Importe o serviço
+import { TextStyleService } from '../../services/text-style.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-text-modal',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './text-modal.component.html',
   styleUrls: ['./text-modal.component.css']
 })
@@ -13,117 +14,229 @@ export class TextModalComponent implements OnInit {
   showModal: boolean = false;
   modalData: any = {};
 
-  textContent: string = ''; 
-  textSize: number = 40; 
+  textContent: string = '';
+  textSize: number = 40;
+  isBold: boolean = false;
+  isItalic: boolean = false;
+  isUnderline: boolean = false;
 
-  @Output() textContentChange = new EventEmitter<string>(); 
-  @Output() textSizeChange = new EventEmitter<number>(); 
+  selectedElement: HTMLElement | null = null;
 
-  // Torne o serviço público para que possa ser acessado no template
+  @Output() textContentChange = new EventEmitter<string>();
+  @Output() textSizeChange = new EventEmitter<number>();
+
   constructor(
-    private modalService: ModalService, 
-    public textStyleService: TextStyleService // Mudança para "public"
+    private modalService: ModalService,
+    public textStyleService: TextStyleService
   ) { }
 
   ngOnInit(): void {
-    // Ouvir os eventos do serviço de modal
     this.modalService.modalState$.subscribe(state => {
       if (state.modalType === 'text' && state.open) {
         this.modalData = state.data;
-        this.textContent = this.modalData.content || ''; // Garantir que o conteúdo do texto seja carregado
-        this.textSize = this.modalData.size || 40; // Garantir que o tamanho seja carregado
+        this.textContent = this.modalData.content || '';
+        this.textSize = this.modalData.size || 40;
+        this.isBold = this.modalData.isBold || false;
+        this.isItalic = this.modalData.isItalic || false;
+        this.isUnderline = this.modalData.isUnderline || false;
         this.showModal = true;
       } else if (state.modalType === 'text' && !state.open) {
         this.showModal = false;
       }
     });
+  
+    // Adicionar evento de clique duplo para edição direta
+    document.addEventListener('dblclick', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('text-element')) {
+        this.selectTextElement(target);
+        target.setAttribute('contenteditable', 'true');
+      }
+    });
   }
-
-  closeModal(): void {
-    this.modalService.closeModal();
-  }
-
-  addText(): void {
-    const canvas = document.getElementById('canvas');
-    if (canvas) {
-      const text = document.createElement('div');
-      text.textContent = this.textContent || 'Texto padrão';
-      text.style.position = 'absolute';
-      text.style.top = '150px'; 
-      text.style.left = '150px';
-      text.style.fontSize = `${this.textSize || 10}px`;  
-
-      // Aplica os estilos através do serviço
-      if (this.textStyleService.getBold()) {
-        text.style.fontWeight = 'bold';
-      }
-      if (this.textStyleService.getItalic()) {
-        text.style.fontStyle = 'italic';
-      }
-      if (this.textStyleService.getUnderline()) {
-        text.style.textDecoration = 'underline';
-      }
-
-      text.style.cursor = 'move'; 
-
-      let offsetX: number = 0;
-      let offsetY: number = 0;
-      let isMoving = false;
-
-      text.addEventListener('mousedown', (event: MouseEvent) => {
-        isMoving = true;
-        offsetX = event.clientX - parseInt(text.style.left || '0', 10);
-        offsetY = event.clientY - parseInt(text.style.top || '0', 10);
-        text.style.cursor = 'grabbing';  
-      });
-
-      document.addEventListener('mousemove', (event: MouseEvent) => {
-        if (isMoving) {
-          text.style.left = `${event.clientX - offsetX}px`;
-          text.style.top = `${event.clientY - offsetY}px`;
-        }
-      });
-
-      document.addEventListener('mouseup', () => {
-        isMoving = false;
-        text.style.cursor = 'move'; 
-      });
-
-      canvas.appendChild(text); 
+  // Atualiza o conteúdo de texto em tempo real
+  updateTextContent(): void {
+    if (this.selectedElement) {
+      this.selectedElement.textContent = this.textContent;
+      this.selectedElement.setAttribute('data-content', this.textContent); // Salva a alteração no atributo
     }
   }
 
+  // Atualiza o tamanho do texto em tempo real
+  updateTextSize(): void {
+    if (this.selectedElement) {
+      this.selectedElement.style.fontSize = `${this.textSize}px`;
+      this.selectedElement.setAttribute('data-size', this.textSize.toString()); // Salva a alteração no atributo
+    }
+  }
+
+  // Método para aplicar estilos em tempo real
+  updateTextStyles(): void {
+    if (this.selectedElement) {
+      this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
+      this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
+      this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
+
+      // Salvando as propriedades de estilo
+      this.selectedElement.setAttribute('data-bold', this.isBold.toString());
+      this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
+      this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
+    }
+  }
+  addText(content: string, size: number): void {
+    const canvas = document.getElementById('canvas');
+    if (canvas) {
+      const text = document.createElement('div');
+      text.textContent = content || 'Novo texto!';
+      text.style.position = 'absolute';
+      text.style.top = '100px';
+      text.style.left = '100px';
+      text.style.fontSize = `${size}px`;
+      text.style.cursor = 'move';
+      text.classList.add('text-element');
+  
+      // Atributos para armazenar dados personalizados
+      text.setAttribute('data-content', content);
+      text.setAttribute('data-size', size.toString());
+      text.setAttribute('data-bold', this.isBold.toString());
+      text.setAttribute('data-italic', this.isItalic.toString());
+      text.setAttribute('data-underline', this.isUnderline.toString());
+  
+      // Habilitar edição do texto
+      text.setAttribute('contenteditable', 'true');
+  
+      // Evento de clique para selecionar o texto e abrir o modal
+      text.addEventListener('click', () => {
+        this.selectTextElement(text);  
+      });
+  
+      // Adicionar drag
+      text.addEventListener('mousedown', (event) => this.startDrag(event, text));
+  
+      canvas.appendChild(text);
+    }
+  }
+  applyChanges(): void {
+    if (this.selectedElement) {
+      // Aplicar as alterações no conteúdo de texto
+      this.selectedElement.textContent = this.textContent;
+      this.selectedElement.style.fontSize = `${this.textSize}px`;
+      this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
+      this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
+      this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
+  
+      // Salvar os novos valores nos atributos personalizados
+      this.selectedElement.setAttribute('data-content', this.textContent);
+      this.selectedElement.setAttribute('data-size', this.textSize.toString());
+      this.selectedElement.setAttribute('data-bold', this.isBold.toString());
+      this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
+      this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
+  
+      // Habilitar edição do texto após aplicar as mudanças
+      this.selectedElement.setAttribute('contenteditable', 'true');
+  
+      // Reaplicar o estilo para garantir que o negrito, itálico e sublinhado funcionem corretamente após as mudanças
+      this.updateTextStyles();
+  
+      // Fechar o modal após aplicar
+      this.closeModal();
+    }
+  }
+  
+  
+  
+
+  startDrag(event: MouseEvent, element: HTMLElement): void {
+    let offsetX: number = event.clientX - element.offsetLeft;
+    let offsetY: number = event.clientY - element.offsetTop;
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      element.style.left = `${moveEvent.clientX - offsetX}px`;
+      element.style.top = `${moveEvent.clientY - offsetY}px`;
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
+
+  // Método para selecionar o texto ao clicar e carregar os dados no modal
+  selectTextElement(element: HTMLElement): void {
+    this.selectedElement = element;
+
+    // Carregar os dados armazenados no elemento para o modal
+    this.textContent = element.getAttribute('data-content') || '';
+    this.textSize = parseInt(element.getAttribute('data-size') || '40', 10);
+    this.isBold = element.getAttribute('data-bold') === 'true';
+    this.isItalic = element.getAttribute('data-italic') === 'true';
+    this.isUnderline = element.getAttribute('data-underline') === 'true';
+
+    // Abre o modal com as informações do elemento
+    this.modalService.openModal('text', { content: this.textContent, size: this.textSize, isBold: this.isBold, isItalic: this.isItalic, isUnderline: this.isUnderline });
+  }
+
+  // Alterar negrito, itálico e sublinhado em tempo real
   onBoldChange(event: Event): void {
-    this.textStyleService.setBold((event.target as HTMLInputElement).checked);
+    this.isBold = (event.target as HTMLInputElement).checked;
+    this.updateTextStyles();
   }
 
   onItalicChange(event: Event): void {
-    this.textStyleService.setItalic((event.target as HTMLInputElement).checked);
+    this.isItalic = (event.target as HTMLInputElement).checked;
+    this.updateTextStyles();
   }
 
   onUnderlineChange(event: Event): void {
-    this.textStyleService.setUnderline((event.target as HTMLInputElement).checked);
+    this.isUnderline = (event.target as HTMLInputElement).checked;
+    this.updateTextStyles();
   }
 
   onTextContentChange(newText: string): void {
     this.textContent = newText;
-    this.textContentChange.emit(newText);
+    this.updateTextContent(); 
   }
 
   onTextSizeChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     if (inputElement) {
       this.textSize = Number(inputElement.value);
-      this.textSizeChange.emit(this.textSize);
+      this.updateTextSize();
     }
   }
+  closeModal(): void {
+    if (this.selectedElement) {
+      this.selectedElement.textContent = this.textContent;
+      this.selectedElement.style.fontSize = `${this.textSize}px`;
+      this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
+      this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
+      this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
   
-  onTextSizeChangeManual(value: string): void {
-    const newSize = Number(value);
-    if (!isNaN(newSize) && newSize >= 10 && newSize <= 200) {
-      this.textSize = newSize;
-      this.textSizeChange.emit(this.textSize);
+      // Salvar no elemento os novos valores
+      this.selectedElement.setAttribute('data-content', this.textContent);
+      this.selectedElement.setAttribute('data-size', this.textSize.toString());
+      this.selectedElement.setAttribute('data-bold', this.isBold.toString());
+      this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
+      this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
+  
+      // Manter o elemento editável após fechar o modal
+      this.selectedElement.setAttribute('contenteditable', 'true');
     }
+  
+    // Fechar o modal
+    this.modalService.closeModal();
+    this.showModal = false;
+  }
+
+  // Funcionalidade de clicar fora para salvar alterações
+  handleOutsideClick(event: MouseEvent): void {
+    if (!this.showModal || this.selectedElement?.contains(event.target as Node)) {
+      return;
+    }
+    this.closeModal();
   }
 
   getSliderBackground(): string {
@@ -132,5 +245,13 @@ export class TextModalComponent implements OnInit {
             #ff0000 0%, 
             #ff9900 ${percentage / 3}%, 
             #33cc33 ${percentage}%)`;
+  }
+
+  onTextSizeChangeManual(value: string): void {
+    const newSize = Number(value);
+    if (!isNaN(newSize) && newSize >= 10 && newSize <= 200) {
+      this.textSize = newSize;
+      this.updateTextSize(); // Aplica o tamanho em tempo real
+    }
   }
 }

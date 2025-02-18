@@ -44,7 +44,7 @@
       <label>
         <input 
           type="checkbox" 
-          [checked]="textStyleService.getBold()" 
+          [checked]="isBold" 
           (change)="onBoldChange($event)" 
         />
         Negrito
@@ -54,7 +54,7 @@
       <label>
         <input 
           type="checkbox" 
-          [checked]="textStyleService.getItalic()" 
+          [checked]="isItalic" 
           (change)="onItalicChange($event)" 
         />
         Itálico
@@ -64,14 +64,16 @@
       <label>
         <input 
           type="checkbox" 
-          [checked]="textStyleService.getUnderline()" 
+          [checked]="isUnderline" 
           (change)="onUnderlineChange($event)" 
         />
         Sublinhado
       </label>
     </div>
 
-    <button class="btn" (click)="addText()">Adicionar Texto</button>
+    <!-- Botões de Ação -->
+    <button class="btn" (click)="addText(textContent, textSize)">Adicionar Texto</button>
+    <button class="btn" *ngIf="selectedElement" (click)="applyChanges()">Aplicar</button>
     <button class="btn btn-close" (click)="closeModal()">Fechar</button>
   </div>
 </div>

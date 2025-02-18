@@ -22,6 +22,7 @@ export class CanvasEditorComponent implements OnInit {
   showZPLModal: boolean = false;
   showPNGModal: boolean = false;
   showBMPModal: boolean = false;
+  selectedTextElement: HTMLElement | null = null;
 
   constructor(private modalService: ModalService) { }
 
@@ -84,7 +85,6 @@ addText(content: string, size: number): void {
   if (canvas) {
     const text = document.createElement('div');
     text.textContent = content || 'Novo texto!';
-    text.contentEditable = 'true';
     text.style.position = 'absolute';
     text.style.top = '100px';
     text.style.left = '100px';
@@ -92,20 +92,18 @@ addText(content: string, size: number): void {
     text.style.cursor = 'move';
     text.classList.add('text-element'); // Adiciona uma classe para identificar os textos
     
-    // Atributo customizado para armazenar as informações do texto
-    text.setAttribute('data-content', content);
-    text.setAttribute('data-size', size.toString());
-
-    // Adiciona o evento de clique no texto
+    // Adiciona o evento de clique no texto (Ajustado para permitir reedição)
     text.addEventListener('click', () => {
       this.selectTextElement(text);  // Abre o modal com as informações do texto
     });
-
+  
+    // Garantir que o evento de drag seja sempre configurado
     text.addEventListener('mousedown', (event) => this.startDrag(event, text));
-
+  
     canvas.appendChild(text);
   }
 }
+
 
 
 
@@ -129,15 +127,7 @@ addText(content: string, size: number): void {
     document.addEventListener('mouseup', onMouseUp);
   }
 
-  // Método para adicionar uma imagem ao canvas (usando os dados do modal)
-  // Método para selecionar o texto e abrir o modal
-selectTextElement(element: HTMLElement): void {
-  const textContent = element.getAttribute('data-content') || '';
-  const textSize = parseInt(element.getAttribute('data-size') || '12', 10);
 
-  // Abre o modal de texto com as informações do elemento
-  this.modalService.openModal('text', { content: textContent, size: textSize });
-}
 
 // Método para selecionar a imagem e abrir o modal
 selectImageElement(element: HTMLElement): void {
@@ -152,4 +142,26 @@ selectImageElement(element: HTMLElement): void {
     const element = event.target as HTMLElement;
     element.classList.toggle('expanded'); // Alterna a classe 'expanded' ao clicar
   }
+// Método para salvar o texto editado
+saveTextChanges(newContent: string, newSize: number, element: HTMLElement): void {
+  element.setAttribute('data-content', newContent); // Atualiza o conteúdo
+  element.setAttribute('data-size', newSize.toString()); // Atualiza o tamanho
+
+  // Atualiza o conteúdo visual do elemento de texto no canvas
+  element.textContent = newContent;
+  element.style.fontSize = `${newSize}px`;
+
+  // Fechar o modal após salvar as mudanças
+  this.modalService.closeModal();
+}
+selectTextElement(element: HTMLElement): void {
+  const textContent = element.getAttribute('data-content') || '';
+  const textSize = parseInt(element.getAttribute('data-size') || '12', 10);
+
+  // Abre o modal de texto com as informações do elemento
+  this.modalService.openModal('text', { content: textContent, size: textSize });
+
+  // Define o elemento como selecionado para edição
+  this.selectedTextElement = element; // Guarda a referência do elemento para editar depois
+}
 }
