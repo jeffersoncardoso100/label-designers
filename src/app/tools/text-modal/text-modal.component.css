@@ -154,16 +154,61 @@ button:focus {
   
 }
 
-.text-styles label {
-  font-size: 16px;          /* Tamanho da fonte */
-  cursor: pointer;         /* Cursor de mão para interação */
+/* Estilo para o seletor de fonte */
+select#fontFamily {
+  width: 80%; /* Largura do seletor */
+  padding: 12px 15px; /* Mais espaço interno para um visual mais clean */
+  font-size: 16px; /* Tamanho da fonte */
+  color: #fff; /* Cor do texto */
+  background-color: #444444; /* Cor de fundo escura mais suave */
+  border-radius: 5px; /* Bordas arredondadas */
+  border: 2px solid #666666; /* Borda clara e suave */
+  box-sizing: border-box; /* Para ajustar corretamente o tamanho do elemento */
+  text-align: center; /* Alinha o texto do seletor */
+  cursor: pointer; /* Mostrar cursor de ponteiro ao passar por cima */
+  transition: all 0.3s ease; /* Transições suaves para o hover e o foco */
 }
 
-.text-styles input[type="checkbox"] {
-  margin-right: px;        /* Espaço entre o checkbox e o texto */
+select#fontFamily:hover {
+  border-color: #d52929; /* Cor de borda dourada no hover */
+  background-color: #3b3b3b; /* Mudança sutil na cor de fundo */
 }
 
-.text-styles label:hover {
-  text-decoration: underline;  /* Adiciona sublinhado quando passa o mouse */
+select#fontFamily:focus {
+  outline: none; /* Remove o contorno padrão */
+  border-color: #f71e06; /* Cor de borda azul clara quando focado */
+  background-color: #333333; /* Fundo mais escuro no foco */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Sombra suave azul */
 }
 
+/* Estilo para o label */
+label[for="fontFamily"] {
+  display: block; /* Exibe o label como bloco */
+  font-size: 14px; /* Tamanho da fonte */
+  color: #fff; /* Cor do texto do label */
+  margin-bottom: 8px; /* Espaçamento abaixo do label */
+  text-align: left; /* Alinha o texto à esquerda */
+  font-weight: 600; /* Um toque mais estiloso com peso da fonte */
+  letter-spacing: 0.5px; /* Aumenta o espaçamento entre letras */
+  text-transform: uppercase; /* Deixa o texto em maiúsculas */
+  opacity: 0.8; /* Levemente mais transparente para um visual mais clean */
+  transition: opacity 0.3s ease; /* Suaviza a transição de opacidade */
+}
+
+label[for="fontFamily"]:hover {
+  opacity: 1; /* Torna o label opaco ao passar o mouse */
+}
+
+/* Opções dentro do seletor */
+select#fontFamily option {
+  background-color: #444444; /* Cor de fundo das opções */
+  color: #fff; /* Texto branco nas opções */
+  padding: 10px; /* Mais espaçamento nas opções */
+  font-size: 16px; /* Tamanho da fonte das opções */
+  border-radius: 4px; /* Bordas arredondadas nas opções */
+  transition: background-color 0.3s ease; /* Transição suave no hover das opções */
+}
+
+select#fontFamily option:hover {
+  background-color: #ff1e00; /* Cor de fundo dourada ao passar o mouse sobre as opções */
+}

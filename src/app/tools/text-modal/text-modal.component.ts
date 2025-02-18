@@ -19,6 +19,8 @@ export class TextModalComponent implements OnInit {
   isBold: boolean = false;
   isItalic: boolean = false;
   isUnderline: boolean = false;
+  fontFamily: string = 'Arial'; // Fonte inicial
+  fontList: string[] = ['Arial', 'Verdana', 'Courier New', 'Georgia', 'Times New Roman', 'Tahoma']; // Lista de fontes
 
   selectedElement: HTMLElement | null = null;
 
@@ -39,6 +41,7 @@ export class TextModalComponent implements OnInit {
         this.isBold = this.modalData.isBold || false;
         this.isItalic = this.modalData.isItalic || false;
         this.isUnderline = this.modalData.isUnderline || false;
+        this.fontFamily = this.modalData.fontFamily || 'Arial';
         this.showModal = true;
       } else if (state.modalType === 'text' && !state.open) {
         this.showModal = false;
@@ -54,6 +57,7 @@ export class TextModalComponent implements OnInit {
       }
     });
   }
+
   // Atualiza o conteúdo de texto em tempo real
   updateTextContent(): void {
     if (this.selectedElement) {
@@ -70,6 +74,14 @@ export class TextModalComponent implements OnInit {
     }
   }
 
+  // Atualiza a fonte do texto em tempo real
+  updateFontFamily(): void {
+    if (this.selectedElement) {
+      this.selectedElement.style.fontFamily = this.fontFamily;
+      this.selectedElement.setAttribute('data-font-family', this.fontFamily); // Salva a alteração no atributo
+    }
+  }
+
   // Método para aplicar estilos em tempo real
   updateTextStyles(): void {
     if (this.selectedElement) {
@@ -83,6 +95,7 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
     }
   }
+
   addText(content: string, size: number): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
@@ -92,6 +105,7 @@ export class TextModalComponent implements OnInit {
       text.style.top = '100px';
       text.style.left = '100px';
       text.style.fontSize = `${size}px`;
+      text.style.fontFamily = this.fontFamily;
       text.style.cursor = 'move';
       text.classList.add('text-element');
   
@@ -101,6 +115,7 @@ export class TextModalComponent implements OnInit {
       text.setAttribute('data-bold', this.isBold.toString());
       text.setAttribute('data-italic', this.isItalic.toString());
       text.setAttribute('data-underline', this.isUnderline.toString());
+      text.setAttribute('data-font-family', this.fontFamily);
   
       // Habilitar edição do texto
       text.setAttribute('contenteditable', 'true');
@@ -116,6 +131,7 @@ export class TextModalComponent implements OnInit {
       canvas.appendChild(text);
     }
   }
+
   applyChanges(): void {
     if (this.selectedElement) {
       // Aplicar as alterações no conteúdo de texto
@@ -124,6 +140,7 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
       this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
       this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
+      this.selectedElement.style.fontFamily = this.fontFamily;
   
       // Salvar os novos valores nos atributos personalizados
       this.selectedElement.setAttribute('data-content', this.textContent);
@@ -131,6 +148,7 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.setAttribute('data-bold', this.isBold.toString());
       this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
+      this.selectedElement.setAttribute('data-font-family', this.fontFamily);
   
       // Habilitar edição do texto após aplicar as mudanças
       this.selectedElement.setAttribute('contenteditable', 'true');
@@ -142,9 +160,6 @@ export class TextModalComponent implements OnInit {
       this.closeModal();
     }
   }
-  
-  
-  
 
   startDrag(event: MouseEvent, element: HTMLElement): void {
     let offsetX: number = event.clientX - element.offsetLeft;
@@ -164,7 +179,6 @@ export class TextModalComponent implements OnInit {
     document.addEventListener('mouseup', onMouseUp);
   }
 
-  // Método para selecionar o texto ao clicar e carregar os dados no modal
   selectTextElement(element: HTMLElement): void {
     this.selectedElement = element;
 
@@ -174,12 +188,12 @@ export class TextModalComponent implements OnInit {
     this.isBold = element.getAttribute('data-bold') === 'true';
     this.isItalic = element.getAttribute('data-italic') === 'true';
     this.isUnderline = element.getAttribute('data-underline') === 'true';
+    this.fontFamily = element.getAttribute('data-font-family') || 'Arial';
 
     // Abre o modal com as informações do elemento
-    this.modalService.openModal('text', { content: this.textContent, size: this.textSize, isBold: this.isBold, isItalic: this.isItalic, isUnderline: this.isUnderline });
+    this.modalService.openModal('text', { content: this.textContent, size: this.textSize, isBold: this.isBold, isItalic: this.isItalic, isUnderline: this.isUnderline, fontFamily: this.fontFamily });
   }
 
-  // Alterar negrito, itálico e sublinhado em tempo real
   onBoldChange(event: Event): void {
     this.isBold = (event.target as HTMLInputElement).checked;
     this.updateTextStyles();
@@ -207,6 +221,12 @@ export class TextModalComponent implements OnInit {
       this.updateTextSize();
     }
   }
+
+  onFontFamilyChange(font: string): void {
+    this.fontFamily = font;
+    this.updateFontFamily();
+  }
+
   closeModal(): void {
     if (this.selectedElement) {
       this.selectedElement.textContent = this.textContent;
@@ -214,6 +234,7 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
       this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
       this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
+      this.selectedElement.style.fontFamily = this.fontFamily;
   
       // Salvar no elemento os novos valores
       this.selectedElement.setAttribute('data-content', this.textContent);
@@ -221,17 +242,16 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.setAttribute('data-bold', this.isBold.toString());
       this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
+      this.selectedElement.setAttribute('data-font-family', this.fontFamily);
   
       // Manter o elemento editável após fechar o modal
       this.selectedElement.setAttribute('contenteditable', 'true');
     }
   
-    // Fechar o modal
     this.modalService.closeModal();
     this.showModal = false;
   }
 
-  // Funcionalidade de clicar fora para salvar alterações
   handleOutsideClick(event: MouseEvent): void {
     if (!this.showModal || this.selectedElement?.contains(event.target as Node)) {
       return;
@@ -240,12 +260,20 @@ export class TextModalComponent implements OnInit {
   }
 
   getSliderBackground(): string {
-    const percentage = ((this.textSize - 10) / (200 - 10)) * 100;
+    // Calculando a porcentagem baseada no tamanho do texto
+    const percentage = (this.textSize - 10) / (200 - 10) * 100;
+  
+    // Ajustando a distribuição das cores no gradiente
+    const redStop = (percentage * 0.8); // A cor vermelha ocupa 80% do valor da porcentagem
+    const whiteStop = percentage; // A cor branca chega até a porcentagem calculada
+    
+    // Retorna um gradiente linear ajustado, mais suave
     return `linear-gradient(90deg, 
-            #ff0000 0%, 
-            #ff9900 ${percentage / 3}%, 
-            #33cc33 ${percentage}%)`;
+      rgb(222, 56, 56) ${redStop}%, 
+      
+      rgb(255, 255, 255) ${whiteStop}%)`;
   }
+  
 
   onTextSizeChangeManual(value: string): void {
     const newSize = Number(value);

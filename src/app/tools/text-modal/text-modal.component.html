@@ -1,4 +1,4 @@
-<div id="text-modal" class="modal" style="display: block;">
+<div id="text-modal" class="modal" [ngStyle]="{'display': showModal ? 'block' : 'none'}">
   <div class="modal-content">
     <h3>Adicionar Texto</h3>
     
@@ -6,7 +6,7 @@
     <input 
       type="text" 
       [(ngModel)]="textContent" 
-      (ngModelChange)="textContentChange.emit($event)" 
+      (ngModelChange)="onTextContentChange($event)" 
       id="textContent" 
       class="input-field" 
     />
@@ -26,6 +26,16 @@
       id="textSizeSlider" 
       class="slider" 
     />
+
+    <!-- Seletor de fonte -->
+    <label for="fontFamily">Fonte:</label>
+    <select 
+      id="fontFamily" 
+      [(ngModel)]="fontFamily" 
+      (ngModelChange)="onFontFamilyChange($event)"
+    >
+      <option *ngFor="let font of fontList" [value]="font">{{ font }}</option>
+    </select>
 
     <!-- Input numérico para digitar o tamanho -->
     <input 
