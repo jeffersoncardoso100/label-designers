@@ -1,17 +1,29 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <div class="modal">
-    <div class="modal-content">
-      <h3>Adicionar Imagem</h3>
-      
-      <!-- Botão customizado com ícone para escolher arquivo -->
-      <label class="custom-file-upload">
-        <i class="fas fa-file-upload"></i> <!-- Ícone de upload de arquivo -->
-        <input type="file" (change)="onImageSelected($event)" class="input-field" />
-      </label>
+  <div class="modal-content">
+    <h3>Adicionar Imagem</h3>
+    
+    <!-- Botão customizado com ícone para escolher arquivo -->
+    <label class="custom-file-upload">
+      <i class="fas fa-file-upload"></i> <!-- Ícone de upload de arquivo -->
+      <input type="file" (change)="onImageSelected($event)" class="input-field" />
+    </label>
   
-      <button class="btn" (click)="addImage()">Adicionar imagem ao quadro</button>
-      <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    <!-- Slider para ajustar o tamanho da imagem -->
+    <div class="slider-container">
+      <label for="imageSizeSlider">Tamanho da Imagem</label>
+      <input
+        type="range"
+        id="imageSizeSlider"
+        min="50"
+        max="500"
+        [(ngModel)]="imageSize"
+        class="slider"  
+        [style.background]="getSliderBackground()" 
+      />
+      <span>{{ imageSize }} px</span> <!-- Exibe o tamanho da imagem atual -->
     </div>
-  </div>
   
+    <button class="btn" (click)="addImage()">Adicionar imagem ao quadro</button>
+    <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+  </div>
+</div>
