@@ -1,0 +1,118 @@
+
+  .modal .modal-content {
+    background-color: #383938; /* Cor de fundo escura */
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    max-width: 90%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .modal h3 {
+    font-size: 20px;
+    color: white;
+    margin-bottom: 15px;
+  }
+  
+  .modal label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: white;
+  }
+  
+  .modal .input-field {
+    margin: 10px 0;
+    padding: 8px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: white;
+    background-color: #383938;
+    box-sizing: border-box;
+  }
+  
+  .modal .btn {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #383938;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .modal .btn:hover {
+    background-color: #2e2e2e;
+  }
+  
+  .modal .btn-close {
+    background-color: #ff4d4d;
+  }
+  
+  .modal .btn-close:hover {
+    background-color: #cc0000;
+  }
+  
+  .modal select {
+    width: 80%;
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #444444;
+    border-radius: 5px;
+    border: 2px solid #666666;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .modal select:hover {
+    border-color: #d52929;
+    background-color: #3b3b3b;
+  }
+  
+  .modal select:focus {
+    outline: none;
+    border-color: #f71e06;
+    background-color: #333333;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  
+  .modal input[type="color"] {
+    padding: 8px;
+    margin: 10px 0;
+    width: 80%;
+    background-color: #444444;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal input[type="color"]:hover {
+    background-color: #d52929;
+  }
+  
+  .modal input[type="color"]:focus {
+    outline: none;
+    border-color: #f71e06;
+  }
+  
+  .modal .btn {
+    padding: 12px 20px;
+    background-color: #444444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .modal .btn:hover {
+    background-color: #2e2e2e;
+  }
+  

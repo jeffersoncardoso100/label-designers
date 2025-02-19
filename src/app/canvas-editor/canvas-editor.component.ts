@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from '../services/modal.service'; // Serviço para gerenciar o estado dos modais
+
 import { ImageModalComponent } from "../tools/image-modal/image-modal.component";
 import { TextModalComponent } from "../tools/text-modal/text-modal.component";
 import { CommonModule } from '@angular/common';
@@ -8,15 +9,17 @@ import { ZplGeneratorComponent } from "../Returns/zpl-generator/zpl-generator.co
 import { PngGeneratorComponent } from "../Returns/png-generator/png-generator.component";
 import { BmpGeneratorComponent } from '../Returns/bmp-generator/bmp-generator.component';
 import { RulerComponent } from './ruler/ruler.component';
+import { ShapeService } from '../services/shapes.service';
+import { ShapeModalComponent } from "../tools/shape-modal/shape-modal.component";
 
 @Component({
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent, BmpGeneratorComponent, RulerComponent]
+  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent, BmpGeneratorComponent, RulerComponent, ShapeModalComponent]
 })
 export class CanvasEditorComponent implements OnInit {
-  // Variáveis para controlar a visibilidade dos modais
+  shapes: any[] = [];
   showTextModal: boolean = false;
   showImageModal: boolean = false;
   showZPLModal: boolean = false;
@@ -24,144 +27,141 @@ export class CanvasEditorComponent implements OnInit {
   showBMPModal: boolean = false;
   selectedTextElement: HTMLElement | null = null;
 
-  constructor(private modalService: ModalService) { }
+  constructor(private modalService: ModalService, private shapeService: ShapeService) {}
 
   ngOnInit(): void {
-    // Subscrição para ouvir os eventos de mudança de estado do modal
+    this.shapeService.currentShapes.subscribe(shapes => {
+      this.shapes = shapes;
+      this.renderShapes();
+    });
+
     this.modalService.modalState$.subscribe(state => {
-      console.log('Estado do Modal:', state); // Verificando a alteração no estado
+      console.log('Estado do Modal:', state);
 
-      /** Manipula o estado para o modal de TEXTO */
-      if (state.modalType === 'text' && state.open) {
-        this.showTextModal = true;
-      } else if (state.modalType === 'text' && !state.open) {
-        this.showTextModal = false;
-      }
-
-      /** Manipula o estado para o modal de IMAGEM */
-      if (state.modalType === 'image' && state.open) {
-        this.showImageModal = true;
-      } else if (state.modalType === 'image' && !state.open) {
-        this.showImageModal = false;
-      }
-
-      /** Manipula o estado para o modal de ZPL */
-      if (state.modalType === 'zpl' && state.open) {
-        this.showZPLModal = true;
-      } else if (state.modalType === 'zpl' && !state.open) {
-        this.showZPLModal = false;
-      }
-
-      /** Manipula o estado para o modal de PNG */
-      if (state.modalType === 'png' && state.open) {
-        this.showPNGModal = true;
-      } else if (state.modalType === 'png' && !state.open) {
-        this.showPNGModal = false;
-      }
-
-      /** Manipula o estado para o modal de BMP */
-      if (state.modalType === 'bmp' && state.open) {
-        this.showBMPModal = true;
-      } else if (state.modalType === 'bmp' && !state.open) {
-        this.showBMPModal = false;
-      }
+      if (state.modalType === 'text') this.showTextModal = state.open;
+      else if (state.modalType === 'image') this.showImageModal = state.open;
+      else if (state.modalType === 'zpl') this.showZPLModal = state.open;
+      else if (state.modalType === 'png') this.showPNGModal = state.open;
+      else if (state.modalType === 'bmp') this.showBMPModal = state.open;
     });
   }
-
-  // Abre o modal de texto, acionando o ModalService
-  openTextModal(): void {
-    this.modalService.openModal('text', { content: '', size: 12 });
-  }
-
-  // Abre o modal de imagem, acionando o ModalService
-  openImageModal(): void {
-    this.modalService.openModal('image', { imageUrl: null });
-  }
-
-  // Método para adicionar o texto ao canvas (usando os dados do modal)
-// Método para adicionar o texto ao canvas (usando os dados do modal)
-addText(content: string, size: number): void {
-  const canvas = document.getElementById('canvas');
-  if (canvas) {
-    const text = document.createElement('div');
-    text.textContent = content || 'Novo texto!';
-    text.style.position = 'absolute';
-    text.style.top = '100px';
-    text.style.left = '100px';
-    text.style.fontSize = `${size}px`;
-    text.style.cursor = 'move';
-    text.classList.add('text-element'); // Adiciona uma classe para identificar os textos
-    
-    // Adiciona o evento de clique no texto (Ajustado para permitir reedição)
-    text.addEventListener('click', () => {
-      this.selectTextElement(text);  // Abre o modal com as informações do texto
-    });
+  renderShapes(): void {
+    const canvas = document.getElementById('canvas');
+    if (canvas) {
+      this.shapes.forEach((shape, index) => {
+        let shapeElement = document.getElementById(`shape-${index}`);
   
-    // Garantir que o evento de drag seja sempre configurado
-    text.addEventListener('mousedown', (event) => this.startDrag(event, text));
+        if (!shapeElement) {
+          shapeElement = document.createElement('div');
+          shapeElement.id = `shape-${index}`;
+          shapeElement.style.position = 'absolute';
+          shapeElement.style.zIndex = '1'; // Formas começam no fundo
   
-    canvas.appendChild(text);
+          canvas.appendChild(shapeElement);
+  
+          shapeElement.addEventListener('mousedown', (event) =>
+            this.startDrag(event, shapeElement as HTMLElement, shape)
+          );
+        }
+  
+        shapeElement.style.border = `${shape.borderWidth} solid ${shape.borderColor}`;
+        shapeElement.style.backgroundColor = 'transparent'; // Fundo transparente
+        shapeElement.style.top = `${shape.top || 0}px`;
+        shapeElement.style.left = `${shape.left || 0}px`;
+  
+        switch (shape.type) {
+          case 'square':
+            shapeElement.style.width = `${shape.width || 100}px`;
+            shapeElement.style.height = `${shape.height || 100}px`;
+            break;
+          case 'rectangle':
+            shapeElement.style.width = `${shape.width || 150}px`;
+            shapeElement.style.height = `${shape.height || 100}px`;
+            break;
+          case 'circle':
+            // Para o círculo, ajustamos só o tamanho (width = height)
+            shapeElement.style.width = `${shape.width || 100}px`;  // tamanho ajustado
+            shapeElement.style.height = `${shape.width || 100}px`; // tamanho ajustado
+            shapeElement.style.borderRadius = '50%'; // Fazendo a borda arredondada
+            break;
+          case 'triangle':
+            shapeElement.style.width = '0';
+            shapeElement.style.height = '0';
+            shapeElement.style.borderLeft = `${shape.width / 2 || 50}px solid transparent`;
+            shapeElement.style.borderRight = `${shape.width / 2 || 50}px solid transparent`;
+            shapeElement.style.borderBottom = `${shape.height || 100}px solid ${shape.borderColor}`;
+            break;
+          default:
+            console.error('Tipo de forma desconhecido:', shape.type);
+            break;
+        }
+  
+        // Traz a forma para frente ao clicar
+        shapeElement.addEventListener('click', () => {
+          shapeElement.style.zIndex = '3';
+        });
+      });
+    }
   }
-}
+  
+  
 
-
-
-
-
-  // Método para mover o texto dentro do canvas
-  startDrag(event: MouseEvent, text: HTMLElement): void {
-    const offsetX = event.clientX - text.getBoundingClientRect().left;
-    const offsetY = event.clientY - text.getBoundingClientRect().top;
-
+  startDrag(event: MouseEvent, shape: HTMLElement, shapeData: any): void {
+    // Obtém a posição inicial do mouse em relação ao viewport
+    const startX = event.clientX;
+    const startY = event.clientY;
+  
+    // Obtém a posição inicial do elemento em relação ao viewport
+    const rect = shape.getBoundingClientRect();
+    const elementStartX = rect.left;
+    const elementStartY = rect.top;
+  
+    // Calcula o offset entre o clique do mouse e a posição do elemento
+    const offsetX = startX - elementStartX;
+    const offsetY = startY - elementStartY;
+  
     const onMouseMove = (moveEvent: MouseEvent) => {
-      text.style.left = `${moveEvent.clientX - offsetX}px`;
-      text.style.top = `${moveEvent.clientY - offsetY}px`;
+      // Calcula a nova posição do mouse
+      const newX = moveEvent.clientX - offsetX;
+      const newY = moveEvent.clientY - offsetY;
+  
+      // Atualiza a posição do elemento
+      shape.style.left = `${newX}px`;
+      shape.style.top = `${newY}px`;
+  
+      // Atualiza os dados da forma para refletir a nova posição
+      shapeData.left = newX;
+      shapeData.top = newY;
     };
-
+  
     const onMouseUp = () => {
+      // Remove os listeners de movimento e soltura do mouse
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-
+  
+    // Adiciona os listeners para o movimento e soltura do mouse
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  }
-
-
-
-// Método para selecionar a imagem e abrir o modal
-selectImageElement(element: HTMLElement): void {
-  const imageUrl = element.getAttribute('data-imageUrl') || '';
   
-  // Abre o modal de imagem com a URL da imagem
-  this.modalService.openModal('image', { imageUrl });
-}
-
-
-  toggleSize(event: MouseEvent) {
-    const element = event.target as HTMLElement;
-    element.classList.toggle('expanded'); // Alterna a classe 'expanded' ao clicar
+    // Previne o comportamento padrão do evento
+    event.preventDefault();
   }
-// Método para salvar o texto editado
-saveTextChanges(newContent: string, newSize: number, element: HTMLElement): void {
-  element.setAttribute('data-content', newContent); // Atualiza o conteúdo
-  element.setAttribute('data-size', newSize.toString()); // Atualiza o tamanho
 
-  // Atualiza o conteúdo visual do elemento de texto no canvas
-  element.textContent = newContent;
-  element.style.fontSize = `${newSize}px`;
+  addShape(type: string, borderWidth: string, borderColor: string): void {
+    const shape = { 
+      type, 
+      borderWidth, 
+      borderColor, 
+      left: 0, 
+      top: 0 
+    };
 
-  // Fechar o modal após salvar as mudanças
-  this.modalService.closeModal();
-}
-selectTextElement(element: HTMLElement): void {
-  const textContent = element.getAttribute('data-content') || '';
-  const textSize = parseInt(element.getAttribute('data-size') || '12', 10);
+    this.shapeService.addShape(shape);
+  }
 
-  // Abre o modal de texto com as informações do elemento
-  this.modalService.openModal('text', { content: textContent, size: textSize });
-
-  // Define o elemento como selecionado para edição
-  this.selectedTextElement = element; // Guarda a referência do elemento para editar depois
-}
+  toggleSize(event: MouseEvent): void {
+    const element = event.target as HTMLElement;
+    element.classList.toggle('expanded');
+  }
 }

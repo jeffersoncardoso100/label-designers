@@ -3,7 +3,7 @@
       <h3>Adicionar Forma Geométrica</h3>
   
       <label for="shapeType">Tipo de Forma:</label>
-      <select id="shapeType" [(ngModel)]="shapeType">
+      <select id="shapeType" [(ngModel)]="shapeType" (change)="onShapeTypeChange()">
         <option value="square">Quadrado</option>
         <option value="rectangle">Retângulo</option>
         <option value="circle">Círculo</option>
@@ -17,13 +17,35 @@
         <option value="5px">Grossa</option>
       </select>
   
+      <label for="shapeSize">Largura da Forma:</label>
+      <input
+        type="range"
+        min="50"
+        max="300"
+        [(ngModel)]="width"
+        id="shapeWidth"
+        (input)="updateShapeSize()"
+      />
+  
+      <label *ngIf="shapeType !== 'circle'" for="shapeSize">Altura da Forma:</label>
+      <input
+        *ngIf="shapeType !== 'circle'"
+        type="range"
+        min="50"
+        max="300"
+        [(ngModel)]="height"
+        id="shapeHeight"
+        (input)="updateShapeSize()"
+      />
+  
       <label for="borderColor">Cor da Borda:</label>
       <input type="color" id="borderColor" [(ngModel)]="borderColor">
   
       <label for="fillColor">Cor de Preenchimento:</label>
       <input type="color" id="fillColor" [(ngModel)]="fillColor">
   
-      <button class="btn" (click)="addShape()">Adicionar Forma</button>
+      <button class="btn" (click)="applyChanges()">Adicionar Forma</button>
       <button class="btn btn-close" (click)="closeModal()">Fechar</button>
     </div>
   </div>
+  

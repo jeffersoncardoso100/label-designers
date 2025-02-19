@@ -30,4 +30,7 @@ export class SidebarComponent {
     this.modalService.openModal('bmp');
 
   }
+  openShapeModal(): void {
+    this.modalService.openModal('shape');
+  }
 }
