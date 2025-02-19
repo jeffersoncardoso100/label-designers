@@ -1,0 +1,29 @@
+<div id="shape-modal" class="modal" [ngStyle]="{'display': showModal ? 'block' : 'none'}">
+    <div class="modal-content">
+      <h3>Adicionar Forma Geométrica</h3>
+  
+      <label for="shapeType">Tipo de Forma:</label>
+      <select id="shapeType" [(ngModel)]="shapeType">
+        <option value="square">Quadrado</option>
+        <option value="rectangle">Retângulo</option>
+        <option value="circle">Círculo</option>
+        <option value="triangle">Triângulo</option>
+      </select>
+  
+      <label for="borderWidth">Espessura da Borda:</label>
+      <select id="borderWidth" [(ngModel)]="borderWidth">
+        <option value="1px">Fina</option>
+        <option value="3px">Média</option>
+        <option value="5px">Grossa</option>
+      </select>
+  
+      <label for="borderColor">Cor da Borda:</label>
+      <input type="color" id="borderColor" [(ngModel)]="borderColor">
+  
+      <label for="fillColor">Cor de Preenchimento:</label>
+      <input type="color" id="fillColor" [(ngModel)]="fillColor">
+  
+      <button class="btn" (click)="addShape()">Adicionar Forma</button>
+      <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    </div>
+  </div>
