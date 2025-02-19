@@ -1,8 +1,10 @@
 
 
 
+
 /* Estilização do Modal de Texto */
 .modal-text {
+
   position: absolute; /* Garante que o modal fique dentro do container */
   top: 0;
   right: 0;

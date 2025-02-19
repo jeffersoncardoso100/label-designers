@@ -49,13 +49,14 @@ export class ShapeModalComponent {
     if (this.shapeType === 'circle') {
       this.height = this.width;
     }
-    
+  
     const shape = document.getElementById('shapeElement');
     if (shape) {
       shape.style.width = `${this.width}px`;
       shape.style.height = `${this.height}px`;
     }
   }
+  
 
   applyChanges(): void {
     const shape = {
@@ -66,13 +67,32 @@ export class ShapeModalComponent {
       borderColor: this.borderColor,
       fillColor: this.fillColor
     };
-
+  
     this.shapeService.addShape(shape);
-    this.closeModal();
+    
   }
-
   closeModal(): void {
     this.modalService.closeModal();
     this.showModal = false;
+  }
+
+  getShapeWidthSliderBackground(): string {
+    const percentage = (this.width - 50) / (300 - 50) * 100;
+    const redStop = (percentage * 0.8);
+    const whiteStop = percentage;
+  
+    return `linear-gradient(90deg, 
+      rgb(222, 56, 56) ${redStop}%, 
+      rgb(255, 255, 255) ${whiteStop}%)`;
+  }
+  
+  getShapeHeightSliderBackground(): string {
+    const percentage = (this.height - 50) / (300 - 50) * 100;
+    const redStop = (percentage * 0.8);
+    const whiteStop = percentage;
+  
+    return `linear-gradient(90deg, 
+      rgb(222, 56, 56) ${redStop}%, 
+      rgb(255, 255, 255) ${whiteStop}%)`;
   }
 }

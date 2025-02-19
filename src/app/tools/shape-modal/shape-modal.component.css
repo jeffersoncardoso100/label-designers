@@ -1,13 +1,4 @@
 
-  .modal .modal-content {
-    background-color: #383938; /* Cor de fundo escura */
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-    max-width: 90%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
   
   .modal h3 {
     font-size: 20px;
@@ -115,4 +106,16 @@
   .modal .btn:hover {
     background-color: #2e2e2e;
   }
-  
+  .modal input[type="range"] {
+    width: 80%;
+    margin: 20px 0;
+    appearance: none;
+    height: 7px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+
