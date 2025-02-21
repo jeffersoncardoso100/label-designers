@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shape-modal',
+  standalone: true, // Adicionado para standalone components
   imports: [FormsModule, CommonModule],
   templateUrl: './shape-modal.component.html',
   styleUrls: ['./shape-modal.component.css']
@@ -13,8 +14,8 @@ import { CommonModule } from '@angular/common';
 export class ShapeModalComponent {
   showModal: boolean = false;
   shapeType: string = 'square';
-  width: number = 100;  // Default width
-  height: number = 100; // Default height
+  width: number = 100;
+  height: number = 100;
   borderWidth: string = '1px';
   borderColor: string = '#000000';
   fillColor: string = '#ffffff';
@@ -36,63 +37,64 @@ export class ShapeModalComponent {
     });
   }
 
-  // Este método é chamado quando o tipo de forma é alterado
   onShapeTypeChange(): void {
     if (this.shapeType === 'circle') {
-      // Quando for círculo, a altura deve ser igual à largura
       this.height = this.width;
     }
+    this.updateShapePreview();
   }
 
   updateShapeSize(): void {
-    // Se for círculo, altura será igual à largura
     if (this.shapeType === 'circle') {
       this.height = this.width;
     }
-  
-    const shape = document.getElementById('shapeElement');
-    if (shape) {
-      shape.style.width = `${this.width}px`;
-      shape.style.height = `${this.height}px`;
+    this.updateShapePreview();
+  }
+
+  updateShapePreview(): void {
+    if (this.shapeType === 'triangle') {
+      const triangle = document.querySelector('.preview-triangle') as HTMLElement;
+      if (triangle) {
+        const halfWidth = this.width / 2;
+        const triangleHeight = (this.width * Math.sqrt(3)) / 2; // Altura de um triângulo equilátero
+        triangle.style.borderWidth = `0 ${halfWidth}px ${triangleHeight}px ${halfWidth}px`;
+        triangle.style.borderColor = `transparent transparent ${this.fillColor} transparent`;
+        triangle.style.setProperty('--fill-color', this.fillColor);
+      }
     }
   }
-  
 
   applyChanges(): void {
     const shape = {
       type: this.shapeType,
       width: this.width,
-      height: this.shapeType === 'circle' ? this.width : this.height,  // Para círculos, a altura é igual à largura
+      height: this.shapeType === 'circle' ? this.width : this.height,
       borderWidth: this.borderWidth,
       borderColor: this.borderColor,
       fillColor: this.fillColor
     };
-  
+
     this.shapeService.addShape(shape);
-    
+    this.shapeAdded.emit(shape); // Emite o evento, se necessário
+    this.closeModal();
   }
+
   closeModal(): void {
     this.modalService.closeModal();
     this.showModal = false;
   }
 
   getShapeWidthSliderBackground(): string {
-    const percentage = (this.width - 50) / (300 - 50) * 100;
-    const redStop = (percentage * 0.8);
+    const percentage = ((this.width - 50) / (300 - 50)) * 100;
+    const redStop = percentage * 0.8;
     const whiteStop = percentage;
-  
-    return `linear-gradient(90deg, 
-      rgb(222, 56, 56) ${redStop}%, 
-      rgb(255, 255, 255) ${whiteStop}%)`;
+    return `linear-gradient(90deg, rgb(222, 56, 56) ${redStop}%, rgb(255, 255, 255) ${whiteStop}%)`;
   }
-  
+
   getShapeHeightSliderBackground(): string {
-    const percentage = (this.height - 50) / (300 - 50) * 100;
-    const redStop = (percentage * 0.8);
+    const percentage = ((this.height - 50) / (300 - 50)) * 100;
+    const redStop = percentage * 0.8;
     const whiteStop = percentage;
-  
-    return `linear-gradient(90deg, 
-      rgb(222, 56, 56) ${redStop}%, 
-      rgb(255, 255, 255) ${whiteStop}%)`;
+    return `linear-gradient(90deg, rgb(222, 56, 56) ${redStop}%, rgb(255, 255, 255) ${whiteStop}%)`;
   }
 }

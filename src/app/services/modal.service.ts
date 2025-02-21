@@ -13,7 +13,7 @@ export class ModalService {
   /** Função para abrir qualquer modal */
   openModal(modalType: string, data?: any): void {
     // Verificando se 'data' e 'data.content' estão definidos antes de passar para o modalState
-    const modalData = data && data.content ? data : { content: 'Conteúdo padrão' }; // Exemplo de conteúdo padrão
+    const modalData = data && data.content ? data : { content: '' }; // Exemplo de conteúdo padrão
 
     this.modalState.next({ modalType, data: modalData, open: true });
   }

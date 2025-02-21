@@ -1,11 +1,10 @@
-/* Estilização do Modal de Imagem */
 .modal-image {
-    position: fixed; /* Modal fixo na tela */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(to bottom, rgba(219, 64, 64, 0.7), rgba(0, 0, 0, 0.5)); /* Gradiente igual ao modal-text */
+    background: linear-gradient(to bottom, rgba(219, 64, 64, 0.7), rgba(0, 0, 0, 0.5));
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,51 +13,57 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-/* Quando o modal estiver visível */
 .modal-image.show {
     opacity: 1;
     display: flex;
 }
 
-/* Estilo do conteúdo do modal de imagem */
 .modal-image .modal-content {
-    background-color: white;
+    background-color: #1a1a1a;
     padding: 20px;
     border-radius: 8px;
-    width: 350px; /* Um pouco mais largo para acomodar a pré-visualização */
+    width: 350px;
     max-width: 90%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     text-align: center;
 }
 
-/* Título do modal */
 h3 {
-    color: #333; /* Cor escura para legibilidade */
+    color: #ffffff;
     font-size: 20px;
     margin-bottom: 15px;
 }
 
-/* Estilo do label */
+.image-upload-container {
+    background-color: #333333;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
 label {
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
     text-align: left;
-    color: #555; /* Contraste suave */
+    color: #ffffff;
 }
 
-/* Estilo do botão de upload */
 .custom-file-upload {
-    padding: 10px 20px;
-    background-color: #646464;
-    color: rgb(255, 255, 255);
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ff4d4d 0%, #db4040 100%);
+    color: #ffffff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    width: 80%;
+    width: 50%; /* Reduzido de 60% para 50% */
     margin: 10px auto;
     text-align: center;
     display: block;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
 }
 
 .custom-file-upload i {
@@ -66,10 +71,18 @@ label {
 }
 
 .custom-file-upload:hover {
-    background-color: #2e2e2e;
+    background: linear-gradient(135deg, #cc0000 0%, #b03232 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Pré-visualização da imagem */
+.custom-file-upload[disabled] {
+    background: #666666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .image-preview {
     margin: 15px 0;
     max-height: 200px;
@@ -83,22 +96,20 @@ label {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Container do slider */
 .slider-container {
     margin: 20px 0;
 }
 
 .slider-container span {
-    color: #555;
+    color: #ffffff;
     font-size: 14px;
     display: block;
     margin-top: 5px;
 }
 
-/* Slider de ajustes */
 .slider {
     width: 80%;
     appearance: none;
@@ -107,6 +118,7 @@ label {
     outline: none;
     opacity: 0.8;
     transition: opacity 0.2s;
+    background: #ffffff;
 }
 
 .slider:hover {
@@ -117,7 +129,7 @@ label {
     appearance: none;
     width: 15px;
     height: 15px;
-    background: #fafcfa;
+    background: #e3e0e0;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -125,12 +137,11 @@ label {
 .slider::-moz-range-thumb {
     width: 15px;
     height: 15px;
-    background: #f5f5f5;
+    background: #ff4d4d;
     border-radius: 50%;
     cursor: pointer;
 }
 
-/* Estilização dos botões */
 .modal-actions {
     display: flex;
     justify-content: space-around;
@@ -158,8 +169,7 @@ label {
     background-color: #cc0000;
 }
 
-/* Foco nos botões */
 button:focus {
     outline: none;
-    box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
 }

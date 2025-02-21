@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./image-modal.component.css']
 })
 export class ImageModalComponent implements OnInit {
+  @ViewChild('imageInput') imageInput!: ElementRef<HTMLInputElement>; // Referência ao input de arquivo
+
   showModal: boolean = false;
   imageSize: number = 100; // Valor inicial padrão
   modalData: any = { imageUrl: null };
@@ -23,7 +25,6 @@ export class ImageModalComponent implements OnInit {
       if (state.modalType === 'image') {
         if (state.open) {
           this.modalData = state.data || { imageUrl: null, size: 100 };
-          // Só atualiza imageSize se não houver um elemento selecionado
           if (!this.selectedImageElement) {
             this.imageSize = this.modalData.size || 100;
           }
@@ -43,10 +44,17 @@ export class ImageModalComponent implements OnInit {
     });
   }
 
+  // Função para disparar o clique no input de arquivo
+  triggerFileInput(): void {
+    if (this.imageInput && !this.selectedImageElement) {
+      this.imageInput.nativeElement.click();
+    }
+  }
+
   closeModal(): void {
     this.modalService.closeModal();
     this.showModal = false;
-    this.selectedImageElement = null; // Limpa a seleção, mas mantém imageSize
+    this.selectedImageElement = null;
   }
 
   onImageSelected(event: Event): void {
@@ -93,14 +101,12 @@ export class ImageModalComponent implements OnInit {
   selectImageElement(element: HTMLImageElement): void {
     this.selectedImageElement = element;
 
-    // Carrega o tamanho salvo do elemento
     const savedSize = element.getAttribute('data-size');
     if (savedSize) {
       this.imageSize = parseInt(savedSize, 10);
     } else {
-      // Fallback para o estilo atual, se data-size não existir
       this.imageSize = parseInt(element.style.width || '100', 10);
-      element.setAttribute('data-size', this.imageSize.toString()); // Garante que data-size seja inicializado
+      element.setAttribute('data-size', this.imageSize.toString());
     }
 
     const currentTop = element.getAttribute('data-top') || element.style.top || '150';
