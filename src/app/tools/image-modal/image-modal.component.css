@@ -1,64 +1,53 @@
-/* Estilização do Modal de Texto */
-.modal-text {
-    position: absolute; /* Garante que o modal fique dentro do container */
+/* Estilização do Modal de Imagem */
+.modal-image {
+    position: fixed; /* Modal fixo na tela */
     top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(251, 250, 250, 0.5); /* Fundo escurecido */
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to bottom, rgba(219, 64, 64, 0.7), rgba(0, 0, 0, 0.5)); /* Gradiente igual ao modal-text */
     display: flex;
-    justify-content: center; /* Centraliza o modal horizontalmente */
-    align-items: center; /* Centraliza o modal verticalmente */
-    z-index: 9999; /* Garante que o modal esteja acima dos outros conteúdos */
-    opacity: 0; /* Inicialmente oculto */
-    transition: opacity 0.5s ease-in-out; /* Efeito suave ao abrir o modal */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 /* Quando o modal estiver visível */
-.modal-text.show {
+.modal-image.show {
     opacity: 1;
     display: flex;
 }
 
-/* Estilo do conteúdo do modal de texto */
-.modal-text .modal-content {
+/* Estilo do conteúdo do modal de imagem */
+.modal-image .modal-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    width: 300px; /* Ajuste de largura para manter consistência */
-    max-width: 90%; /* Para garantir que o modal não ultrapasse a tela */
+    width: 350px; /* Um pouco mais largo para acomodar a pré-visualização */
+    max-width: 90%;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 /* Título do modal */
 h3 {
-    color: #ffffff; /* Cor escura para melhor legibilidade */
+    color: #333; /* Cor escura para legibilidade */
     font-size: 20px;
     margin-bottom: 15px;
 }
 
 /* Estilo do label */
 label {
-    display: block; /* Faz com que o label ocupe toda a largura disponível */
+    display: block;
     font-size: 14px;
-    margin-bottom: 5px; /* Adiciona um pequeno espaço abaixo do label */
-    text-align: left; /* Alinha o texto à esquerda */
-    color: #f7f7f7; /* Melhor contraste */
+    margin-bottom: 5px;
+    text-align: left;
+    color: #555; /* Contraste suave */
 }
 
-/* Estilo do campo de input */
-.input-field {
-    margin: 10px 0;
-    padding: 8px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-/* Estilo do botão para escolher arquivo */
+/* Estilo do botão de upload */
 .custom-file-upload {
     padding: 10px 20px;
     background-color: #646464;
@@ -66,79 +55,54 @@ label {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 80%; /* Tamanho semelhante ao campo de input */
-    margin: 10px 0;
+    width: 80%;
+    margin: 10px auto;
     text-align: center;
+    display: block;
 }
 
 .custom-file-upload i {
-    margin-right: 10px; /* Espaço entre o ícone e o texto */
+    margin-right: 10px;
 }
 
 .custom-file-upload:hover {
-    background-color: #2e2e2e; /* Um tom mais escuro no hover */
+    background-color: #2e2e2e;
 }
 
-/* Estilização dos botões */
-.btn {
-    padding: 10px 20px;
-    margin: 10px;
-    background-color: #383938;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: #2e2e2e; /* Um tom mais escuro no hover */
-}
-
-.btn-close {
-    background-color: #ff4d4d; /* Um vermelho para o botão de fechar */
-}
-
-.btn-close:hover {
-    background-color: #cc0000; /* Vermelho mais escuro no hover */
-}
-
-/* Efeito de fade-in para o modal */
-.modal-text.show {
-    display: flex;
-    opacity: 1;
-    transition: opacity 0.5s ease-in;
-}
-
-/* Foco nos botões */
-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
-}
-
-/* Fundo do modal com gradiente */
-.modal-text {
-    background: linear-gradient(to bottom, rgba(219, 64, 64, 0.7), rgba(0, 0, 0, 0.5));
-}
-
-/* Estilização do seletor de cores */
-.color-picker {
-    width: 80%;
+/* Pré-visualização da imagem */
+.image-preview {
     margin: 15px 0;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    background: #ffffff;
+    max-height: 200px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Container do slider */
+.slider-container {
+    margin: 20px 0;
+}
+
+.slider-container span {
+    color: #555;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
 }
 
 /* Slider de ajustes */
 .slider {
     width: 80%;
-    margin: 20px 0;
     appearance: none;
     height: 7px;
-    background: #ddd;
     border-radius: 5px;
     outline: none;
     opacity: 0.8;
@@ -166,7 +130,36 @@ button:focus {
     cursor: pointer;
 }
 
-/* Cor do texto do span */
-.slider-container span {
-    color: #ffffff;
+/* Estilização dos botões */
+.modal-actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #383938;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #2e2e2e;
+}
+
+.btn-close {
+    background-color: #ff4d4d;
+}
+
+.btn-close:hover {
+    background-color: #cc0000;
+}
+
+/* Foco nos botões */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
 }

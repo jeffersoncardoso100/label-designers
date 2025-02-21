@@ -1,14 +1,26 @@
-<div class="modal">
+<div id="image-modal" class="modal" [ngStyle]="{'display': showModal ? 'block' : 'none'}">
   <div class="modal-content">
-    <h3>Adicionar Imagem</h3>
-    
-    <!-- Botão customizado com ícone para escolher arquivo -->
-    <label class="custom-file-upload">
-      <i class="fas fa-file-upload"></i> <!-- Ícone de upload de arquivo -->
-      <input type="file" (change)="onImageSelected($event)" class="input-field" />
-    </label>
-  
-    <!-- Slider para ajustar o tamanho da imagem -->
+    <h3>Propriedades da Imagem</h3>
+
+    <div class="image-upload-container">
+      <label for="imageInput">Selecionar Imagem</label>
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        [disabled]="selectedImageElement !== null"
+      >
+      <div class="image-preview" *ngIf="modalData.imageUrl">
+        <img
+          [src]="modalData.imageUrl"
+          alt="Image Preview"
+          [style.width.px]="imageSize"
+          style="max-height: 200px; object-fit: contain;"
+        >
+      </div>
+    </div>
+
     <div class="slider-container">
       <label for="imageSizeSlider">Tamanho da Imagem</label>
       <input
@@ -17,13 +29,17 @@
         min="50"
         max="500"
         [(ngModel)]="imageSize"
-        class="slider"  
-        [style.background]="getSliderBackground()" 
+        (input)="onSliderChange($event)"
+        class="slider"
+        [style.background]="getSliderBackground()"
       />
-      <span>{{ imageSize }} px</span> <!-- Exibe o tamanho da imagem atual -->
+      <span>{{ imageSize }} px</span>
     </div>
-  
-    <button class="btn" (click)="addImage()">Adicionar imagem ao quadro</button>
-    <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+
+    <div class="button-container">
+      <button class="btn" (click)="addImage()" *ngIf="!selectedImageElement">Adicionar Imagem</button>
+      <button class="btn" (click)="applyChanges()" *ngIf="selectedImageElement">Aplicar</button>
+      <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    </div>
   </div>
 </div>
