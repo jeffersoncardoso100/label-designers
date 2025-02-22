@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalService } from '../services/modal.service'; // Serviço para gerenciar o estado dos modais
-
+import { ModalService } from '../services/modal.service';
 import { ImageModalComponent } from "../tools/image-modal/image-modal.component";
 import { TextModalComponent } from "../tools/text-modal/text-modal.component";
 import { CommonModule } from '@angular/common';
@@ -11,21 +10,27 @@ import { BmpGeneratorComponent } from '../Returns/bmp-generator/bmp-generator.co
 import { RulerComponent } from './ruler/ruler.component';
 import { ShapeService } from '../services/shapes.service';
 import { ShapeModalComponent } from "../tools/shape-modal/shape-modal.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent, BmpGeneratorComponent, RulerComponent, ShapeModalComponent]
+  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent, BmpGeneratorComponent, RulerComponent, ShapeModalComponent, FormsModule]
 })
 export class CanvasEditorComponent implements OnInit {
   shapes: any[] = [];
+  texts: any[] = [];
   showTextModal: boolean = false;
   showImageModal: boolean = false;
   showZPLModal: boolean = false;
   showPNGModal: boolean = false;
   showBMPModal: boolean = false;
   selectedTextElement: HTMLElement | null = null;
+
+  canvasWidth: number = 100;
+  canvasHeight: number = 80;
+  private readonly MM_TO_PX = 7.992125984;
 
   constructor(private modalService: ModalService, private shapeService: ShapeService) {}
 
@@ -37,38 +42,82 @@ export class CanvasEditorComponent implements OnInit {
 
     this.modalService.modalState$.subscribe(state => {
       console.log('Estado do Modal:', state);
-
       if (state.modalType === 'text') this.showTextModal = state.open;
       else if (state.modalType === 'image') this.showImageModal = state.open;
       else if (state.modalType === 'zpl') this.showZPLModal = state.open;
       else if (state.modalType === 'png') this.showPNGModal = state.open;
       else if (state.modalType === 'bmp') this.showBMPModal = state.open;
     });
+
+    this.updateCanvasSize();
+    
   }
+
+  updateCanvasSize(): void {
+    const canvas = document.getElementById('canvas') as HTMLElement;
+    if (canvas) {
+      const minWidthMm = 50;
+      const minHeightMm = 50;
+      const maxWidthMm = 500;
+      const maxHeightMm = 500;
+
+      const widthMm = Math.min(Math.max(this.canvasWidth, minWidthMm), maxWidthMm);
+      const heightMm = Math.min(Math.max(this.canvasHeight, minHeightMm), maxHeightMm);
+
+      const widthPx = widthMm * this.MM_TO_PX;
+      const heightPx = heightMm * this.MM_TO_PX;
+
+      canvas.style.width = `${widthPx}px`;
+      canvas.style.height = `${heightPx}px`;
+
+      if (widthMm <= 75 || heightMm <= 75) {
+        canvas.classList.add('small');
+      } else {
+        canvas.classList.remove('small');
+      }
+
+      this.renderShapes();
+      this.renderTexts();
+    }
+  }
+
+  onSizeChange(): void {
+    this.updateCanvasSize();
+  }
+
+  expandCanvas(dimension: 'width' | 'height', amountMm: number): void {
+    const minSizeMm = 50;
+    const maxSizeMm = 500;
+
+    if (dimension === 'width') {
+      this.canvasWidth = Math.min(Math.max(this.canvasWidth + amountMm, minSizeMm), maxSizeMm);
+    } else if (dimension === 'height') {
+      this.canvasHeight = Math.min(Math.max(this.canvasHeight + amountMm, minSizeMm), maxSizeMm);
+    }
+    this.updateCanvasSize();
+  }
+
   renderShapes(): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
       this.shapes.forEach((shape, index) => {
         let shapeElement = document.getElementById(`shape-${index}`);
-  
         if (!shapeElement) {
           shapeElement = document.createElement('div');
           shapeElement.id = `shape-${index}`;
           shapeElement.style.position = 'absolute';
-          shapeElement.style.zIndex = '1'; // Formas começam no fundo
-  
+          shapeElement.style.zIndex = '1';
           canvas.appendChild(shapeElement);
-  
           shapeElement.addEventListener('mousedown', (event) =>
             this.startDrag(event, shapeElement as HTMLElement, shape)
           );
         }
-  
+
         shapeElement.style.border = `${shape.borderWidth} solid ${shape.borderColor}`;
-        shapeElement.style.backgroundColor = 'transparent'; // Fundo transparente
+        shapeElement.style.backgroundColor = 'transparent';
         shapeElement.style.top = `${shape.top || 0}px`;
         shapeElement.style.left = `${shape.left || 0}px`;
-  
+
         switch (shape.type) {
           case 'square':
             shapeElement.style.width = `${shape.width || 100}px`;
@@ -79,10 +128,9 @@ export class CanvasEditorComponent implements OnInit {
             shapeElement.style.height = `${shape.height || 100}px`;
             break;
           case 'circle':
-            // Para o círculo, ajustamos só o tamanho (width = height)
-            shapeElement.style.width = `${shape.width || 100}px`;  // tamanho ajustado
-            shapeElement.style.height = `${shape.width || 100}px`; // tamanho ajustado
-            shapeElement.style.borderRadius = '50%'; // Fazendo a borda arredondada
+            shapeElement.style.width = `${shape.width || 100}px`;
+            shapeElement.style.height = `${shape.width || 100}px`;
+            shapeElement.style.borderRadius = '50%';
             break;
           case 'triangle':
             shapeElement.style.width = '0';
@@ -95,57 +143,79 @@ export class CanvasEditorComponent implements OnInit {
             console.error('Tipo de forma desconhecido:', shape.type);
             break;
         }
-  
-        // Traz a forma para frente ao clicar
+
         shapeElement.addEventListener('click', () => {
           shapeElement.style.zIndex = '3';
         });
       });
     }
   }
-  
-  
 
-  startDrag(event: MouseEvent, shape: HTMLElement, shapeData: any): void {
-    // Obtém a posição inicial do mouse em relação ao viewport
+  renderTexts(): void {
+    const canvas = document.getElementById('canvas');
+    if (canvas) {
+      this.texts.forEach((text, index) => {
+        let textElement = document.getElementById(`text-${index}`);
+        if (!textElement) {
+          textElement = document.createElement('div');
+          textElement.id = `text-${index}`;
+          textElement.style.position = 'absolute';
+          textElement.style.zIndex = '2';
+          textElement.style.cursor = 'move';
+          textElement.textContent = text.content || 'Texto Padrão';
+          canvas.appendChild(textElement);
+          textElement.addEventListener('mousedown', (event) =>
+            this.startDrag(event, textElement as HTMLElement, text)
+          );
+        }
+
+        textElement.style.top = `${text.top || 0}px`;
+        textElement.style.left = `${text.left || 0}px`;
+        textElement.style.fontSize = `${text.fontSize || 16}px`;
+        textElement.style.color = text.color || '#000000';
+        textElement.style.userSelect = 'none';
+      });
+    }
+  }
+
+  startDrag(event: MouseEvent, element: HTMLElement, data: any): void {
     const startX = event.clientX;
     const startY = event.clientY;
-  
-    // Obtém a posição inicial do elemento em relação ao viewport
-    const rect = shape.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     const elementStartX = rect.left;
     const elementStartY = rect.top;
-  
-    // Calcula o offset entre o clique do mouse e a posição do elemento
     const offsetX = startX - elementStartX;
     const offsetY = startY - elementStartY;
-  
+
     const onMouseMove = (moveEvent: MouseEvent) => {
-      // Calcula a nova posição do mouse
       const newX = moveEvent.clientX - offsetX;
       const newY = moveEvent.clientY - offsetY;
-  
-      // Atualiza a posição do elemento
-      shape.style.left = `${newX}px`;
-      shape.style.top = `${newY}px`;
-  
-      // Atualiza os dados da forma para refletir a nova posição
-      shapeData.left = newX;
-      shapeData.top = newY;
+      element.style.left = `${newX}px`;
+      element.style.top = `${newY}px`;
+      data.left = newX;
+      data.top = newY;
     };
-  
+
     const onMouseUp = () => {
-      // Remove os listeners de movimento e soltura do mouse
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
-  
-    // Adiciona os listeners para o movimento e soltura do mouse
+
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-  
-    // Previne o comportamento padrão do evento
     event.preventDefault();
+  }
+
+  addText(content: string, fontSize: number = 16, color: string = '#000000'): void {
+    const text = {
+      content,
+      fontSize,
+      color,
+      left: 0,
+      top: 0,
+    };
+    this.texts.push(text);
+    this.renderTexts();
   }
 
   addShape(type: string, borderWidth: string, borderColor: string): void {
@@ -156,12 +226,15 @@ export class CanvasEditorComponent implements OnInit {
       left: 0, 
       top: 0 
     };
-
     this.shapeService.addShape(shape);
   }
 
   toggleSize(event: MouseEvent): void {
     const element = event.target as HTMLElement;
     element.classList.toggle('expanded');
+  }
+
+  openTextModal(): void {
+    this.modalService.openModal('text');
   }
 }
