@@ -14,7 +14,11 @@
       <button class="size-btn increase" (click)="expandCanvas('height', 10)">+</button>
       <button class="size-btn decrease" (click)="expandCanvas('height', -10)">-</button>
     </div>
-  
+    <div class="control-group">
+      <button class="size-btn" [class.increase]="!isExpanded" [class.decrease]="isExpanded" (click)="toggleExpansion()">
+        {{ isExpanded ? 'Reduzir' : 'Expandir' }}
+      </button>
+    </div>
   </div>
 
   <app-ruler></app-ruler>

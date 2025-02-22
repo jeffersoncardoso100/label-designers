@@ -91,11 +91,11 @@
 }
 
 .size-btn {
-  width: 35px;
+  width: 60px;
   height: 35px;
   border: none;
-  border-radius: 50%;
-  font-size: 18px;
+  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
   color: #ffffff;
@@ -127,12 +127,12 @@
   margin-top: 135px;
   margin-left: 319px;
   position: relative;
-  width: 1000px; /* Valor inicial, ajustado pelo TS */
-  height: 800px; /* Valor inicial, ajustado pelo TS */
   background-color: #ffffff;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
 .canvas-container::before {
@@ -191,10 +191,9 @@
   }
 
   .canvas-container {
-    width: 90vw;
-    height: 60vh;
     margin-left: 0;
     margin-top: 150px;
+    width: 90vw;
   }
 
   .canvas-controls {
@@ -207,7 +206,6 @@
 @media (max-width: 480px) {
   .canvas-container {
     width: 95vw;
-    height: 50vh;
     margin-left: 0;
   }
 

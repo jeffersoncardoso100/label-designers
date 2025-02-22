@@ -16,7 +16,18 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-canvas-editor',
   templateUrl: './canvas-editor.component.html',
   styleUrls: ['./canvas-editor.component.css'],
-  imports: [ImageModalComponent, TextModalComponent, CommonModule, SidebarComponent, ZplGeneratorComponent, PngGeneratorComponent, BmpGeneratorComponent, RulerComponent, ShapeModalComponent, FormsModule]
+  imports: [
+    ImageModalComponent, 
+    TextModalComponent, 
+    CommonModule, 
+    SidebarComponent, 
+    ZplGeneratorComponent, 
+    PngGeneratorComponent, 
+    BmpGeneratorComponent, 
+    RulerComponent, 
+    ShapeModalComponent, 
+    FormsModule
+  ]
 })
 export class CanvasEditorComponent implements OnInit {
   shapes: any[] = [];
@@ -28,9 +39,11 @@ export class CanvasEditorComponent implements OnInit {
   showBMPModal: boolean = false;
   selectedTextElement: HTMLElement | null = null;
 
-  canvasWidth: number = 100;
-  canvasHeight: number = 80;
-  private readonly MM_TO_PX = 7.992125984;
+  canvasWidth: number = 100;  // Tamanho real em mm
+  canvasHeight: number = 80;  // Tamanho real em mm
+  isExpanded: boolean = false; // Estado de expansão
+  private readonly MM_TO_PX = 7.992125984; // Conversão de mm para px
+  private readonly EXPANSION_FACTOR = 2;   // Fator de expansão (ex.: 2x)
 
   constructor(private modalService: ModalService, private shapeService: ShapeService) {}
 
@@ -50,7 +63,6 @@ export class CanvasEditorComponent implements OnInit {
     });
 
     this.updateCanvasSize();
-    
   }
 
   updateCanvasSize(): void {
@@ -67,8 +79,14 @@ export class CanvasEditorComponent implements OnInit {
       const widthPx = widthMm * this.MM_TO_PX;
       const heightPx = heightMm * this.MM_TO_PX;
 
+      // Define o tamanho base do canvas
       canvas.style.width = `${widthPx}px`;
       canvas.style.height = `${heightPx}px`;
+
+      // Aplica a escala apenas na visualização
+      const scale = this.isExpanded ? this.EXPANSION_FACTOR : 1;
+      canvas.style.transform = `scale(${scale})`;
+      canvas.style.transformOrigin = 'top left'; // Origem da escala no canto superior esquerdo
 
       if (widthMm <= 75 || heightMm <= 75) {
         canvas.classList.add('small');
@@ -94,6 +112,11 @@ export class CanvasEditorComponent implements OnInit {
     } else if (dimension === 'height') {
       this.canvasHeight = Math.min(Math.max(this.canvasHeight + amountMm, minSizeMm), maxSizeMm);
     }
+    this.updateCanvasSize();
+  }
+
+  toggleExpansion(): void {
+    this.isExpanded = !this.isExpanded;
     this.updateCanvasSize();
   }
 
@@ -135,8 +158,8 @@ export class CanvasEditorComponent implements OnInit {
           case 'triangle':
             shapeElement.style.width = '0';
             shapeElement.style.height = '0';
-            shapeElement.style.borderLeft = `${shape.width / 2 || 50}px solid transparent`;
-            shapeElement.style.borderRight = `${shape.width / 2 || 50}px solid transparent`;
+            shapeElement.style.borderLeft = `${(shape.width || 100) / 2}px solid transparent`;
+            shapeElement.style.borderRight = `${(shape.width || 100) / 2}px solid transparent`;
             shapeElement.style.borderBottom = `${shape.height || 100}px solid ${shape.borderColor}`;
             break;
           default:
@@ -179,17 +202,18 @@ export class CanvasEditorComponent implements OnInit {
   }
 
   startDrag(event: MouseEvent, element: HTMLElement, data: any): void {
-    const startX = event.clientX;
-    const startY = event.clientY;
+    const factor = this.isExpanded ? this.EXPANSION_FACTOR : 1;
+    const startX = event.clientX / factor;
+    const startY = event.clientY / factor;
     const rect = element.getBoundingClientRect();
-    const elementStartX = rect.left;
-    const elementStartY = rect.top;
+    const elementStartX = rect.left / factor;
+    const elementStartY = rect.top / factor;
     const offsetX = startX - elementStartX;
     const offsetY = startY - elementStartY;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      const newX = moveEvent.clientX - offsetX;
-      const newY = moveEvent.clientY - offsetY;
+      const newX = (moveEvent.clientX / factor) - offsetX;
+      const newY = (moveEvent.clientY / factor) - offsetY;
       element.style.left = `${newX}px`;
       element.style.top = `${newY}px`;
       data.left = newX;
@@ -207,25 +231,13 @@ export class CanvasEditorComponent implements OnInit {
   }
 
   addText(content: string, fontSize: number = 16, color: string = '#000000'): void {
-    const text = {
-      content,
-      fontSize,
-      color,
-      left: 0,
-      top: 0,
-    };
+    const text = { content, fontSize, color, left: 0, top: 0 };
     this.texts.push(text);
     this.renderTexts();
   }
 
   addShape(type: string, borderWidth: string, borderColor: string): void {
-    const shape = { 
-      type, 
-      borderWidth, 
-      borderColor, 
-      left: 0, 
-      top: 0 
-    };
+    const shape = { type, borderWidth, borderColor, left: 0, top: 0, width: 100, height: 100 };
     this.shapeService.addShape(shape);
   }
 
