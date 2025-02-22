@@ -2,6 +2,15 @@
   <div class="modal-content">
     <h3>Adicionar Forma Geométrica</h3>
 
+    <div class="shape-preview-container">
+      <div class="shape-preview" [ngClass]="{
+        'preview-square': shapeType === 'square',
+        'preview-rectangle': shapeType === 'rectangle',
+        'preview-circle': shapeType === 'circle',
+        'preview-triangle': shapeType === 'triangle'
+      }"></div>
+    </div>
+
     <label for="shapeType">Tipo de Forma:</label>
     <select id="shapeType" [(ngModel)]="shapeType" (change)="onShapeTypeChange()">
       <option value="square">Quadrado</option>
@@ -11,13 +20,13 @@
     </select>
 
     <label for="borderWidth">Espessura da Borda:</label>
-    <select id="borderWidth" [(ngModel)]="borderWidth">
+    <select id="borderWidth" [(ngModel)]="borderWidth" (change)="updateShapePreview()">
       <option value="1px">Fina</option>
       <option value="3px">Média</option>
       <option value="5px">Grossa</option>
     </select>
 
-    <label for="shapeSize">Largura da Forma:</label>
+    <label for="shapeWidth">Largura da Forma:</label>
     <div class="slider-container">
       <input
         type="range"
@@ -39,7 +48,7 @@
       <span>px</span>
     </div>
 
-    <label *ngIf="shapeType !== 'circle'" for="shapeSize">Altura da Forma:</label>
+    <label *ngIf="shapeType !== 'circle'" for="shapeHeight">Altura da Forma:</label>
     <div *ngIf="shapeType !== 'circle'" class="slider-container">
       <input
         type="range"
@@ -62,12 +71,14 @@
     </div>
 
     <label for="borderColor">Cor da Borda:</label>
-    <input type="color" id="borderColor" [(ngModel)]="borderColor">
+    <input type="color" id="borderColor" [(ngModel)]="borderColor" (input)="updateShapePreview()">
 
     <label for="fillColor">Cor de Preenchimento:</label>
-    <input type="color" id="fillColor" [(ngModel)]="fillColor">
+    <input type="color" id="fillColor" [(ngModel)]="fillColor" (input)="updateShapePreview()">
 
-    <button class="btn" (click)="applyChanges()">Adicionar Forma</button>
-    <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    <div class="button-container">
+      <button class="btn" (click)="applyChanges()">Adicionar Forma</button>
+      <button class="btn btn-close" (click)="closeModal()">Fechar</button>
+    </div>
   </div>
 </div>

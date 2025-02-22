@@ -12,16 +12,113 @@
   color: white;
 }
 
-.modal .input-field {
-  margin: 10px 0;
-  padding: 8px;
-  width: 80%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.modal .slider-container {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal .slider-container input[type="range"] {
+  width: 60%;
+  appearance: none;
+  height: 7px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.modal .slider-container input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background: #ff4d4d;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.modal .slider-container input[type="number"] {
+  width: 60px;
+  padding: 5px;
+  background-color: #444444;
   color: white;
-  background-color: #383938;
-  box-sizing: border-box;
+  border: 1px solid #666666;
+  border-radius: 4px;
+}
+
+.modal select {
+  width: 80%;
+  padding: 12px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #444444;
+  border-radius: 5px;
+  border: 2px solid #666666;
+  cursor: pointer;
+}
+
+.modal select:hover {
+  border-color: #d52929;
+  background-color: #3b3b3b;
+}
+
+.modal input[type="color"] {
+  padding: 8px;
+  margin: 10px 0;
+  width: 80%;
+  background-color: #444444;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.shape-preview-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
+  background-color: rgb(188, 192, 192); /* Seu fundo cinza */
+  border-radius: 8px;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(255, 255, 255, 0.1); /* Efeito 3D */
+  padding: 10px;
+}
+
+.shape-preview {
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra para destacar a forma */
+}
+
+.preview-circle {
+  border-radius: 50%;
+}
+
+.preview-triangle {
+  width: 0;
+  height: 0;
+  background-color: transparent;
+  position: relative;
+}
+
+.preview-triangle::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--border-width));
+  left: calc(-1 * var(--border-width));
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 calc(var(--border-width) + 50px) calc(var(--border-width) + 86.6px) calc(var(--border-width) + 50px);
+  border-color: transparent transparent var(--border-color) transparent;
+  z-index: -1;
+}
+
+.modal .button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
 }
 
 .modal .btn {
@@ -43,89 +140,4 @@
 
 .modal .btn-close:hover {
   background-color: #cc0000;
-}
-
-.modal select {
-  width: 80%;
-  padding: 12px 15px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #444444;
-  border-radius: 5px;
-  border: 2px solid #666666;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.modal select:hover {
-  border-color: #d52929;
-  background-color: #3b3b3b;
-}
-
-.modal select:focus {
-  outline: none;
-  border-color: #f71e06;
-  background-color: #333333;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.modal input[type="color"] {
-  padding: 8px;
-  margin: 10px 0;
-  width: 80%;
-  background-color: #444444;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.modal input[type="color"]:hover {
-  background-color: #d52929;
-}
-
-.modal input[type="color"]:focus {
-  outline: none;
-  border-color: #f71e06;
-}
-
-.modal input[type="range"] {
-  width: 80%;
-  margin: 20px 0;
-  appearance: none;
-  height: 7px;
-  background: #ddd;
-  border-radius: 5px;
-  outline: none;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-}
-
-/* Estilos para a pré-visualização */
-.modal .shape-preview {
-  margin: 15px 0;
-  max-height: 200px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal .preview-square,
-.modal .preview-rectangle {
-  /* Quadrado e retângulo não precisam de estilos extras além do ngStyle */
-}
-
-.modal .preview-circle {
-  border-radius: 50%;
-}
-
-.modal .preview-triangle {
-  width: 0;
-  height: 0;
-  background-color: transparent; /* Remove o fundo padrão */
-  border-style: solid;
-  border-width: 0 50px 86.6px 50px; /* Triângulo equilátero baseado na largura */
-  border-color: transparent transparent var(--fill-color) transparent;
 }

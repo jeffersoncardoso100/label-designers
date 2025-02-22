@@ -10,23 +10,19 @@ export class ZplGeneratorComponent implements OnInit {
   public zpl: string = '';
   public showModal: boolean = false;
 
-  constructor(private modalService: ModalService) { }
+  constructor(private modalService: ModalService) {}
 
   ngOnInit(): void {
-    // Escutando mudanças de estado no serviço de modal
     this.modalService.modalState$.subscribe(state => {
-      if (state.modalType === 'zpl' && state.open) {
-        this.showModal = true;
-        this.generateZPL();  // Gera o ZPL automaticamente quando o modal for aberto
-      } else {
-        this.showModal = false;
+      this.showModal = state.modalType === 'zpl' && state.open;
+      if (this.showModal) {
+        this.generateZPL();
       }
     });
   }
 
-  // Função para gerar o código ZPL
   public generateZPL(): void {
-    const canvas = document.getElementById('canvas') as HTMLElement;
+    const canvas = document.getElementById('canvas') as HTMLElement | null;
     if (!canvas) {
       console.error('Canvas não encontrado!');
       return;
@@ -35,112 +31,109 @@ export class ZplGeneratorComponent implements OnInit {
     this.zpl = this.buildZPL(canvas);
     console.log('Código ZPL gerado:', this.zpl);
   }
-/**
-   * Constrói o código ZPL baseado no canvas fornecido.
-   * 
-   * @param {HTMLElement} canvas - O elemento HTML que contém os textos e imagens a serem convertidos para ZPL.
-   * @returns {string} O código ZPL gerado.
-   * 
-   * @example
-   * const zplCode = this.buildZPL(document.getElementById('canvas'));
-   */
-private buildZPL(canvas: HTMLElement): string {
-  let zpl = '^XA\n';
 
-  const textElements = canvas.querySelectorAll('div');
-  const imageElements = canvas.querySelectorAll('img');
+  private buildZPL(canvas: HTMLElement): string {
+    let zpl = '^XA\n';
 
-  zpl += this.processTextElements(textElements, canvas);
-  zpl += this.processImageElements(imageElements, canvas);
+    const textElements = canvas.querySelectorAll('div:not(.shape-element)') as NodeListOf<HTMLDivElement>;
+    const imageElements = canvas.querySelectorAll('img') as NodeListOf<HTMLImageElement>;
+    const shapeElements = canvas.querySelectorAll('.shape-element') as NodeListOf<HTMLElement>;
 
-  zpl += '^XZ';
-  return zpl;
-}
+    zpl += this.processTextElements(textElements, canvas);
+    zpl += this.processImageElements(imageElements, canvas);
+    zpl += this.processShapeElements(shapeElements, canvas);
 
-/**
- * Processa os elementos de texto dentro do canvas e converte para código ZPL.
- * 
- * @param {NodeListOf<HTMLDivElement>} textElements - Lista de elementos de texto dentro do canvas.
- * @param {HTMLElement} canvas - O elemento canvas que contém os textos.
- * @returns {string} Código ZPL correspondente aos textos.
- */
-private processTextElements(textElements: NodeListOf<HTMLDivElement>, canvas: HTMLElement): string {
-  let zpl = '';
-
-  textElements.forEach((text) => {
-    const content = text.textContent?.trim() || '';
-    const fontSize = this.parseFontSize(text.style.fontSize);
-    const { left, top } = this.getElementPosition(text, canvas);
-
-    zpl += `^FO${left},${top}^A0N,${fontSize},${fontSize}^FD${content}^FS\n`;
-  });
-
-  return zpl;
-}
-
-/**
- * Processa os elementos de imagem dentro do canvas e converte para código ZPL.
- * 
- * @param {NodeListOf<HTMLImageElement>} imageElements - Lista de elementos de imagem dentro do canvas.
- * @param {HTMLElement} canvas - O elemento canvas que contém as imagens.
- * @returns {string} Código ZPL correspondente às imagens.
- */
-private processImageElements(imageElements: NodeListOf<HTMLImageElement>, canvas: HTMLElement): string {
-  let zpl = '';
-
-  imageElements.forEach((img) => {
-    const { left, top } = this.getElementPosition(img, canvas);
-    zpl += `^FO${left},${top}^GFA,100,100,10,${img.src}^FS\n`;
-  });
-
-  return zpl;
-}
-
-/**
- * Obtém a posição relativa de um elemento dentro do canvas.
- * 
- * @param {HTMLElement} element - O elemento a ser posicionado.
- * @param {HTMLElement} canvas - O elemento canvas de referência.
- * @returns {{ left: number, top: number }} As coordenadas relativas do elemento.
- * 
- * @example
- * const position = this.getElementPosition(element, canvas);
- * console.log(position.left, position.top);
- */
-private getElementPosition(element: HTMLElement, canvas: HTMLElement): { left: number; top: number } {
-  const rect = element.getBoundingClientRect();
-  const canvasRect = canvas.getBoundingClientRect();
-  return {
-    left: Math.round(rect.left - canvasRect.left),
-    top: Math.round(rect.top - canvasRect.top),
-  };
-}
-
-/**
- * Converte um tamanho de fonte CSS para número.
- * 
- * @param {string} fontSize - O tamanho da fonte como string (ex: '12px').
- * @returns {number} O tamanho da fonte convertido para número.
- * 
- * @example
- * const size = this.parseFontSize('14px'); // Retorna 14
- */
-private parseFontSize(fontSize: string): number {
-  return parseInt(fontSize, 10) || 10;
-}
-
-
-  // Função para copiar o ZPL gerado
-  public copyZPL(): void {
-    navigator.clipboard.writeText(this.zpl).then(() => {
-      alert('Código ZPL copiado com sucesso!');
-    }).catch(err => {
-      console.error('Erro ao copiar ZPL', err);
-    });
+    zpl += '^XZ';
+    return zpl;
   }
 
-  // Função para fechar o modal
+  private processTextElements(textElements: NodeListOf<HTMLDivElement>, canvas: HTMLElement): string {
+    let zpl = '';
+    textElements.forEach((text) => {
+      const content = text.textContent?.trim() || '';
+      if (!content) return;
+      const fontSize = this.parseFontSize(text.style.fontSize);
+      const { left, top } = this.getElementPosition(text, canvas);
+
+      zpl += `^FO${left},${top}^A0N,${fontSize},${fontSize}^FD${content}^FS\n`;
+    });
+    return zpl;
+  }
+
+  private processImageElements(imageElements: NodeListOf<HTMLImageElement>, canvas: HTMLElement): string {
+    let zpl = '';
+    imageElements.forEach((img) => {
+      const { left, top } = this.getElementPosition(img, canvas);
+      const width = Math.round(parseFloat(img.style.width) || img.width);
+      const height = Math.round(parseFloat(img.style.height) || img.height);
+      zpl += `^FO${left},${top}^GFA,${width * height},${width * height},${Math.ceil(width / 8)},${this.imageToZPL(img)}^FS\n`;
+    });
+    return zpl;
+  }
+
+  private processShapeElements(shapeElements: NodeListOf<HTMLElement>, canvas: HTMLElement): string {
+    let zpl = '';
+    shapeElements.forEach((shape) => {
+      const { left, top } = this.getElementPosition(shape, canvas);
+      const width = Math.round(parseFloat(shape.style.width) || 100);
+      const height = Math.round(parseFloat(shape.style.height) || 100);
+      const borderWidth = parseInt(shape.style.borderWidth, 10) || 1;
+      const borderColor = shape.style.borderColor || '#000000';
+      const fillColor = shape.style.backgroundColor || 'transparent';
+
+      const shapeType = shape.getAttribute('data-type') || 'square';
+
+      switch (shapeType) {
+        case 'square':
+        case 'rectangle':
+          zpl += `^FO${left},${top}^GB${width},${height},${borderWidth},${this.getZPLColor(borderColor)},0^FS\n`;
+          if (fillColor !== 'transparent') {
+            zpl += `^FO${left},${top}^GB${width},${height},0,${this.getZPLColor(fillColor)},0^FS\n`;
+          }
+          break;
+        case 'circle':
+          const diameter = Math.min(width, height);
+          zpl += `^FO${left},${top}^GC${diameter},${borderWidth},${this.getZPLColor(borderColor)}^FS\n`;
+          break;
+        case 'triangle':
+          zpl += `^FO${left},${top}^GB${width},${height},${borderWidth},${this.getZPLColor(borderColor)},0^FS\n`;
+          break;
+        default:
+          console.warn(`Forma não suportada: ${shapeType}`);
+      }
+    });
+    return zpl;
+  }
+
+  private imageToZPL(img: HTMLImageElement): string {
+    return '::'; // Placeholder - implement actual image conversion logic here
+  }
+
+  private getZPLColor(cssColor: string): string {
+    const color = cssColor.toLowerCase();
+    return color === '#000000' || color === 'black' || color === 'rgb(0,0,0)' ? 'B' : 'W';
+  }
+
+  private getElementPosition(element: HTMLElement, canvas: HTMLElement): { left: number; top: number } {
+    const rect = element.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+    return {
+      left: Math.round(rect.left - canvasRect.left),
+      top: Math.round(rect.top - canvasRect.top),
+    };
+  }
+
+  private parseFontSize(fontSize: string): number {
+    return parseInt(fontSize, 10) || 10;
+  }
+
+  public copyZPL(): void {
+    navigator.clipboard.writeText(this.zpl)
+      .then(() => alert('Código ZPL copiado com sucesso!'))
+      .catch(err => console.error('Erro ao copiar ZPL', err));
+  }
+
   public closeModal(): void {
-    this.modalService.closeModal(); // Fecha o modal via serviço
+    this.modalService.closeModal();
   }
 }
