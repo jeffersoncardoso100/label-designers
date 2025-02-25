@@ -72,28 +72,33 @@ export class CanvasEditorComponent implements OnInit {
       const minHeightMm = 50;
       const maxWidthMm = 500;
       const maxHeightMm = 500;
-
+  
+      // Limita os valores de largura e altura
       const widthMm = Math.min(Math.max(this.canvasWidth, minWidthMm), maxWidthMm);
       const heightMm = Math.min(Math.max(this.canvasHeight, minHeightMm), maxHeightMm);
-
+  
+      // Converte de mm para px
       const widthPx = widthMm * this.MM_TO_PX;
       const heightPx = heightMm * this.MM_TO_PX;
-
-      // Define o tamanho base do canvas
+  
+      // Define o tamanho do canvas diretamente
       canvas.style.width = `${widthPx}px`;
       canvas.style.height = `${heightPx}px`;
-
-      // Aplica a escala apenas na visualização
+  
+      // Remove a escala para redimensionamento real (ajuste apenas visual se necessário)
       const scale = this.isExpanded ? this.EXPANSION_FACTOR : 1;
       canvas.style.transform = `scale(${scale})`;
-      canvas.style.transformOrigin = 'top left'; // Origem da escala no canto superior esquerdo
 
+      canvas.style.transformOrigin = 'top left'; // Origem fixa no topo esquerdo
+  
+      // Ajusta a classe small, se necessário
       if (widthMm <= 75 || heightMm <= 75) {
         canvas.classList.add('small');
       } else {
         canvas.classList.remove('small');
       }
-
+  
+      // Renderiza formas e textos após o redimensionamento
       this.renderShapes();
       this.renderTexts();
     }
@@ -174,6 +179,7 @@ export class CanvasEditorComponent implements OnInit {
     }
   }
 
+
   renderTexts(): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
@@ -201,6 +207,8 @@ export class CanvasEditorComponent implements OnInit {
     }
   }
 
+
+
   startDrag(event: MouseEvent, element: HTMLElement, data: any): void {
     const factor = this.isExpanded ? this.EXPANSION_FACTOR : 1;
     const startX = event.clientX / factor;
@@ -220,11 +228,14 @@ export class CanvasEditorComponent implements OnInit {
       data.top = newY;
     };
 
+
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
+
+    
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     event.preventDefault();
@@ -243,6 +254,7 @@ export class CanvasEditorComponent implements OnInit {
 
   toggleSize(event: MouseEvent): void {
     const element = event.target as HTMLElement;
+
     element.classList.toggle('expanded');
   }
 
@@ -250,3 +262,5 @@ export class CanvasEditorComponent implements OnInit {
     this.modalService.openModal('text');
   }
 }
+
+

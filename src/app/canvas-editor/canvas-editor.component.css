@@ -73,6 +73,7 @@
   background: #c4c4cb;
   color: #000000;
   text-align: center;
+  
 }
 
 .canvas-controls input[type="number"]:hover {
@@ -124,16 +125,20 @@
 
 /* Canvas */
 .canvas-container {
-  margin-top: 135px;
-  margin-left: 319px;
-  position: relative;
+  position: absolute; /* Fixa a posição em relação ao .main-container */
+  top: 135px; /* Distância fixa do topo */
+  left: 319px; /* Distância fixa da esquerda */
   background-color: #ffffff;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: width 0.3s ease, height 0.3s ease; /* Transição apenas em width e height */
 }
+
+
+ /* Estilos para quando o canvas é pequeno, se necessário */
+
 
 .canvas-container::before {
   content: "";
@@ -205,12 +210,12 @@
 
 @media (max-width: 480px) {
   .canvas-container {
-    width: 95vw;
+    width: 85vw;
     margin-left: 0;
   }
 
   .canvas-controls {
-    width: 95vw;
+    width: 85vw;
     padding: 10px;
   }
 }

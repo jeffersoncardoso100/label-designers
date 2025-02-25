@@ -14,7 +14,7 @@ export class TextStyleService {
 
   constructor() { }
 
-  // Métodos para alterar os estilos
+/**Método para alteração do estilo*/
   setBold(value: boolean): void {
     this.styles.isBold = value;
   }
@@ -27,7 +27,7 @@ export class TextStyleService {
     this.styles.isUnderlined = value;
   }
 
-  // Métodos para obter os estilos
+  /** Métodos para obter os estilos*/
   getBold(): boolean {
     return this.styles.isBold;
   }
@@ -40,7 +40,7 @@ export class TextStyleService {
     return this.styles.isUnderlined;
   }
 
-  // Método para obter todos os estilos de uma vez
+  /**Método para obter todos os estilos de uma vez*/
   getStyles(): { isBold: boolean, isItalic: boolean, isUnderlined: boolean } {
     return this.styles;
   }

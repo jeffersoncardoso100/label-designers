@@ -8,6 +8,7 @@
       <button class="size-btn increase" (click)="expandCanvas('width', 10)">+</button>
       <button class="size-btn decrease" (click)="expandCanvas('width', -10)">-</button>
     </div>
+    
     <div class="control-group">
       <label for="canvasHeight">Altura (mm):</label>
       <input type="number" id="canvasHeight" [(ngModel)]="canvasHeight" (input)="onSizeChange()" min="50" max="500" step="1" [class.invalid]="canvasHeight < 50">
@@ -22,8 +23,9 @@
   </div>
 
   <app-ruler></app-ruler>
+
   <div id="canvas" class="canvas-container">
-    <div class="canvas-content" (click)="toggleSize($event)"></div>
+   <div class="canvas-content" (click)="toggleSize($event)"></div>
   </div>
 
   <app-sidebar></app-sidebar>
