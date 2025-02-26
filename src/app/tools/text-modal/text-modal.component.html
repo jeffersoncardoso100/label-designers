@@ -84,6 +84,7 @@
     <!-- Botões de Ação -->
     <button class="btn" (click)="addText(textContent, textSize)">Adicionar Texto</button>
     <button class="btn" *ngIf="selectedElement" (click)="applyChanges()">Aplicar</button>
+    <button class="btn btn-close" *ngIf="selectedElement" (click)="deleteSelectedElement()">Deletar</button>
     <button class="btn btn-close" (click)="closeModal()">Fechar</button>
   </div>
 </div>

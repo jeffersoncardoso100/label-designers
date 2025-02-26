@@ -84,6 +84,7 @@ export class CanvasEditorComponent implements OnInit {
       // Define o tamanho do canvas diretamente
       canvas.style.width = `${widthPx}px`;
       canvas.style.height = `${heightPx}px`;
+      console.log(this.canvasWidth)
   
       // Remove a escala para redimensionamento real (ajuste apenas visual se necessário)
       const scale = this.isExpanded ? this.EXPANSION_FACTOR : 1;
@@ -109,7 +110,7 @@ export class CanvasEditorComponent implements OnInit {
   }
 
   expandCanvas(dimension: 'width' | 'height', amountMm: number): void {
-    const minSizeMm = 50;
+    const minSizeMm = 40;
     const maxSizeMm = 500;
 
     if (dimension === 'width') {

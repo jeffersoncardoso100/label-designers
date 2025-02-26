@@ -1,11 +1,13 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, HostListener } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { TextStyleService } from '../../services/text-style.service';
 import { CommonModule } from '@angular/common';
+import { DeleteService } from '../../services/delete.service';
 
 @Component({
   selector: 'app-text-modal',
+  standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './text-modal.component.html',
   styleUrls: ['./text-modal.component.css']
@@ -19,18 +21,21 @@ export class TextModalComponent implements OnInit {
   isBold: boolean = false;
   isItalic: boolean = false;
   isUnderline: boolean = false;
-  fontFamily: string = 'Arial'; // Fonte inicial
-  fontList: string[] = ['Arial', 'Verdana', 'Courier New', 'Georgia', 'Times New Roman', 'Tahoma']; // Lista de fontes
+  fontFamily: string = 'Arial';
+  fontList: string[] = ['Arial', 'Verdana', 'Courier New', 'Georgia', 'Times New Roman', 'Tahoma'];
 
   selectedElement: HTMLElement | null = null;
 
   @Output() textContentChange = new EventEmitter<string>();
   @Output() textSizeChange = new EventEmitter<number>();
+  
 
   constructor(
     private modalService: ModalService,
-    public textStyleService: TextStyleService
-  ) { }
+    public textStyleService: TextStyleService,
+    private deleteService: DeleteService
+    
+  ) {}
 
   ngOnInit(): void {
     this.modalService.modalState$.subscribe(state => {
@@ -47,8 +52,7 @@ export class TextModalComponent implements OnInit {
         this.showModal = false;
       }
     });
-  
-    // Adicionar evento de clique duplo para edição direta
+
     document.addEventListener('dblclick', (event) => {
       const target = event.target as HTMLElement;
       if (target.classList.contains('text-element')) {
@@ -58,38 +62,33 @@ export class TextModalComponent implements OnInit {
     });
   }
 
-  // Atualiza o conteúdo de texto em tempo real
   updateTextContent(): void {
     if (this.selectedElement) {
       this.selectedElement.textContent = this.textContent;
-      this.selectedElement.setAttribute('data-content', this.textContent); // Salva a alteração no atributo
+      this.selectedElement.setAttribute('data-content', this.textContent);
     }
   }
 
-  // Atualiza o tamanho do texto em tempo real
   updateTextSize(): void {
     if (this.selectedElement) {
       this.selectedElement.style.fontSize = `${this.textSize}px`;
-      this.selectedElement.setAttribute('data-size', this.textSize.toString()); // Salva a alteração no atributo
+      this.selectedElement.setAttribute('data-size', this.textSize.toString());
     }
   }
 
-  // Atualiza a fonte do texto em tempo real
   updateFontFamily(): void {
     if (this.selectedElement) {
       this.selectedElement.style.fontFamily = this.fontFamily;
-      this.selectedElement.setAttribute('data-font-family', this.fontFamily); // Salva a alteração no atributo
+      this.selectedElement.setAttribute('data-font-family', this.fontFamily);
     }
   }
 
-  // Método para aplicar estilos em tempo real
   updateTextStyles(): void {
     if (this.selectedElement) {
       this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
       this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
       this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
 
-      // Salvando as propriedades de estilo
       this.selectedElement.setAttribute('data-bold', this.isBold.toString());
       this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
@@ -108,55 +107,44 @@ export class TextModalComponent implements OnInit {
       text.style.fontFamily = this.fontFamily;
       text.style.cursor = 'move';
       text.classList.add('text-element');
-  
-      // Atributos para armazenar dados personalizados
+
       text.setAttribute('data-content', content);
       text.setAttribute('data-size', size.toString());
       text.setAttribute('data-bold', this.isBold.toString());
       text.setAttribute('data-italic', this.isItalic.toString());
       text.setAttribute('data-underline', this.isUnderline.toString());
       text.setAttribute('data-font-family', this.fontFamily);
-  
-      // Habilitar edição do texto
+
       text.setAttribute('contenteditable', 'true');
-  
-      // Evento de clique para selecionar o texto e abrir o modal
+
       text.addEventListener('click', () => {
-        this.selectTextElement(text);  
+        this.selectTextElement(text);
       });
-  
-      // Adicionar drag
+
       text.addEventListener('mousedown', (event) => this.startDrag(event, text));
-  
+
       canvas.appendChild(text);
     }
   }
 
   applyChanges(): void {
     if (this.selectedElement) {
-      // Aplicar as alterações no conteúdo de texto
       this.selectedElement.textContent = this.textContent;
       this.selectedElement.style.fontSize = `${this.textSize}px`;
       this.selectedElement.style.fontWeight = this.isBold ? 'bold' : 'normal';
       this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
       this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
       this.selectedElement.style.fontFamily = this.fontFamily;
-  
-      // Salvar os novos valores nos atributos personalizados
+
       this.selectedElement.setAttribute('data-content', this.textContent);
       this.selectedElement.setAttribute('data-size', this.textSize.toString());
       this.selectedElement.setAttribute('data-bold', this.isBold.toString());
       this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
       this.selectedElement.setAttribute('data-font-family', this.fontFamily);
-  
-      // Habilitar edição do texto após aplicar as mudanças
+
       this.selectedElement.setAttribute('contenteditable', 'true');
-  
-      // Reaplicar o estilo para garantir que o negrito, itálico e sublinhado funcionem corretamente após as mudanças
       this.updateTextStyles();
-  
-      // Fechar o modal após aplicar
       this.closeModal();
     }
   }
@@ -181,8 +169,6 @@ export class TextModalComponent implements OnInit {
 
   selectTextElement(element: HTMLElement): void {
     this.selectedElement = element;
-
-    // Carregar os dados armazenados no elemento para o modal
     this.textContent = element.getAttribute('data-content') || '';
     this.textSize = parseInt(element.getAttribute('data-size') || '40', 10);
     this.isBold = element.getAttribute('data-bold') === 'true';
@@ -190,10 +176,30 @@ export class TextModalComponent implements OnInit {
     this.isUnderline = element.getAttribute('data-underline') === 'true';
     this.fontFamily = element.getAttribute('data-font-family') || 'Arial';
 
-    // Abre o modal com as informações do elemento
-    this.modalService.openModal('text', { content: this.textContent, size: this.textSize, isBold: this.isBold, isItalic: this.isItalic, isUnderline: this.isUnderline, fontFamily: this.fontFamily });
+    this.modalService.openModal('text', {
+      content: this.textContent,
+      size: this.textSize,
+      isBold: this.isBold,
+      isItalic: this.isItalic,
+      isUnderline: this.isUnderline,
+      fontFamily: this.fontFamily
+    });
   }
 
+// Função de deleção usando o serviço
+deleteSelectedElement(): void {
+  if (this.deleteService.deleteElement(this.selectedElement)) {
+    this.selectedElement = null;
+    this.closeModal();
+  }
+}
+
+@HostListener('document:keydown', ['$event'])
+handleKeyboardEvent(event: KeyboardEvent): void {
+  if (this.showModal && event.key === 'Delete' && this.selectedElement) {
+    this.deleteSelectedElement();
+  }
+}
   onBoldChange(event: Event): void {
     this.isBold = (event.target as HTMLInputElement).checked;
     this.updateTextStyles();
@@ -211,7 +217,7 @@ export class TextModalComponent implements OnInit {
 
   onTextContentChange(newText: string): void {
     this.textContent = newText;
-    this.updateTextContent(); 
+    this.updateTextContent();
   }
 
   onTextSizeChange(event: Event): void {
@@ -235,19 +241,17 @@ export class TextModalComponent implements OnInit {
       this.selectedElement.style.fontStyle = this.isItalic ? 'italic' : 'normal';
       this.selectedElement.style.textDecoration = this.isUnderline ? 'underline' : 'none';
       this.selectedElement.style.fontFamily = this.fontFamily;
-  
-      // Salvar no elemento os novos valores
+
       this.selectedElement.setAttribute('data-content', this.textContent);
       this.selectedElement.setAttribute('data-size', this.textSize.toString());
       this.selectedElement.setAttribute('data-bold', this.isBold.toString());
       this.selectedElement.setAttribute('data-italic', this.isItalic.toString());
       this.selectedElement.setAttribute('data-underline', this.isUnderline.toString());
       this.selectedElement.setAttribute('data-font-family', this.fontFamily);
-  
-      // Manter o elemento editável após fechar o modal
+
       this.selectedElement.setAttribute('contenteditable', 'true');
     }
-  
+
     this.modalService.closeModal();
     this.showModal = false;
   }
@@ -260,26 +264,17 @@ export class TextModalComponent implements OnInit {
   }
 
   getSliderBackground(): string {
-    // Calculando a porcentagem baseada no tamanho do texto
-    const percentage = (this.textSize - 10) / (200 - 10) * 100;
-  
-    // Ajustando a distribuição das cores no gradiente
-    const redStop = (percentage * 0.8); // A cor vermelha ocupa 80% do valor da porcentagem
-    const whiteStop = percentage; // A cor branca chega até a porcentagem calculada
-    
-    // Retorna um gradiente linear ajustado, mais suave
-    return `linear-gradient(90deg, 
-      rgb(222, 56, 56) ${redStop}%, 
-      
-      rgb(255, 255, 255) ${whiteStop}%)`;
+    const percentage = ((this.textSize - 10) / (200 - 10)) * 100;
+    const redStop = percentage * 0.8;
+    const whiteStop = percentage;
+    return `linear-gradient(90deg, rgb(222, 56, 56) ${redStop}%, rgb(255, 255, 255) ${whiteStop}%)`;
   }
-  
 
   onTextSizeChangeManual(value: string): void {
     const newSize = Number(value);
     if (!isNaN(newSize) && newSize >= 10 && newSize <= 200) {
       this.textSize = newSize;
-      this.updateTextSize(); // Aplica o tamanho em tempo real
+      this.updateTextSize();
     }
   }
 }
