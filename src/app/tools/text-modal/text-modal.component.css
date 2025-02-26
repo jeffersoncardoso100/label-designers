@@ -1,7 +1,4 @@
 
-
-
-
 /* Estilização do Modal de Texto */
 .modal-text {
 
@@ -64,9 +61,16 @@ label {
   background-color: #383938; /* Cor de fundo escura */
   box-sizing: border-box;
 }
+.button-container {
+ 
+  display: flex; /* Alinha os botões horizontalmente */
+  justify-content: center;
+  gap: 10px; /* Espaçamento entre os botões */
+  flex-wrap: wrap; /* Permite quebra de linha em telas pequenas, mas mantém padrão */
+}
 
-/* Estilização dos botões */
 .btn {
+
   padding: 10px 20px;
   margin: 10px;
   background-color: #383938;
@@ -76,6 +80,7 @@ label {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 
 .btn:hover {
   background-color: #2e2e2e; /* Um tom mais escuro no hover */
@@ -214,3 +219,32 @@ select#fontFamily option {
 select#fontFamily option:hover {
   background-color: #ff1e00; /* Cor de fundo dourada ao passar o mouse sobre as opções */
 }
+
+
+
+
+.btn-delete {
+    padding: 0; /* Sem padding pra ícone */
+    width: 40px; /* Tamanho fixo */
+    height: 40px;
+    background: linear-gradient(135deg, #ff4d4d 0%, #db4040 100%); /* Mesmo gradiente */
+    color: #ffffff;
+    border: none;
+    border-radius: 50%; /* Circular */
+
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-delete:hover {
+    background: linear-gradient(135deg, #cc0000 0%, #b03232 100%);
+    transform: scale(1.15); /* Aumenta um pouco no hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.btn-delete i {
+    font-size: 18px; /* Ícone visível */
+}
+

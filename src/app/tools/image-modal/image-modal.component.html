@@ -44,6 +44,14 @@
     <div class="button-container">
       <button class="btn" (click)="addImage()" *ngIf="!selectedImageElement">Adicionar Imagem</button>
       <button class="btn" (click)="applyChanges()" *ngIf="selectedImageElement">Aplicar</button>
+      <button
+        *ngIf="selectedImageElement"
+        class="btn btn-icon btn-delete" 
+        (click)="deleteSelectedElement()"
+        title="Deletar imagem"
+      >
+        <i class="fa fa-trash"></i>
+      </button>
       <button class="btn btn-close" (click)="closeModal()">Fechar</button>
     </div>
   </div>

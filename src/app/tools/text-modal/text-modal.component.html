@@ -82,9 +82,18 @@
     </div>
 
     <!-- Botões de Ação -->
-    <button class="btn" (click)="addText(textContent, textSize)">Adicionar Texto</button>
+    <div class="button-container">
+    <button class="btn" *ngIf="!selectedElement" (click)="addText(textContent, textSize)">Adicionar Texto</button>
     <button class="btn" *ngIf="selectedElement" (click)="applyChanges()">Aplicar</button>
-    <button class="btn btn-close" *ngIf="selectedElement" (click)="deleteSelectedElement()">Deletar</button>
+    <button
+    *ngIf="selectedElement"
+    class="btn btn-icon btn-delete" 
+    (click)="deleteSelectedElement()"
+    title="Deletar Texto"
+  >
+    <i class="fa fa-trash"></i>
+  </button>
     <button class="btn btn-close" (click)="closeModal()">Fechar</button>
   </div>
+</div>
 </div>

@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DeleteService } from '../../services/delete.service';
 
 @Component({
   selector: 'app-image-modal',
@@ -18,7 +19,11 @@ export class ImageModalComponent implements OnInit {
   modalData: any = { imageUrl: null };
   selectedImageElement: HTMLImageElement | null = null;
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    private deleteService: DeleteService
+
+  ) {}
 
   ngOnInit(): void {
     this.modalService.modalState$.subscribe(state => {
@@ -97,6 +102,21 @@ export class ImageModalComponent implements OnInit {
       }
     }
   }
+
+  deleteSelectedElement(): void {
+    if (this.deleteService.deleteElement(this.selectedImageElement)) {
+      this.selectedImageElement = null;
+      this.closeModal();
+    }
+  }
+  
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (this.showModal && event.key === 'Delete' && this.selectedImageElement) {
+      this.deleteSelectedElement();
+    }
+  }
+    
 
   selectImageElement(element: HTMLImageElement): void {
     this.selectedImageElement = element;
