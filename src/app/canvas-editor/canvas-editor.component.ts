@@ -81,18 +81,16 @@ export class CanvasEditorComponent implements OnInit {
       const widthPx = widthMm * this.MM_TO_PX;
       const heightPx = heightMm * this.MM_TO_PX;
   
-      // Define o tamanho do canvas diretamente
+      // Define o tamanho do canvas
       canvas.style.width = `${widthPx}px`;
       canvas.style.height = `${heightPx}px`;
-      console.log(this.canvasWidth)
   
-      // Remove a escala para redimensionamento real (ajuste apenas visual se necessário)
+      // Aplica a escala, se expandido
       const scale = this.isExpanded ? this.EXPANSION_FACTOR : 1;
       canvas.style.transform = `scale(${scale})`;
-
-      canvas.style.transformOrigin = 'top left'; // Origem fixa no topo esquerdo
+      canvas.style.transformOrigin = 'top left';
   
-      // Ajusta a classe small, se necessário
+      // Ajusta a classe 'small' se necessário
       if (widthMm <= 75 || heightMm <= 75) {
         canvas.classList.add('small');
       } else {
@@ -180,7 +178,6 @@ export class CanvasEditorComponent implements OnInit {
     }
   }
 
-
   renderTexts(): void {
     const canvas = document.getElementById('canvas');
     if (canvas) {
@@ -208,35 +205,34 @@ export class CanvasEditorComponent implements OnInit {
     }
   }
 
-
-
+  // Função de arraste corrigida
   startDrag(event: MouseEvent, element: HTMLElement, data: any): void {
+    const canvas = document.getElementById('canvas');
+    if (!canvas) return;
+
     const factor = this.isExpanded ? this.EXPANSION_FACTOR : 1;
-    const startX = event.clientX / factor;
-    const startY = event.clientY / factor;
-    const rect = element.getBoundingClientRect();
-    const elementStartX = rect.left / factor;
-    const elementStartY = rect.top / factor;
-    const offsetX = startX - elementStartX;
-    const offsetY = startY - elementStartY;
+    const canvasRect = canvas.getBoundingClientRect();
+
+    // Calcula o offset relativo ao canvas
+    const elementLeft = parseFloat(element.style.left) || 0;
+    const elementTop = parseFloat(element.style.top) || 0;
+    const offsetX = ((event.clientX - canvasRect.left) / factor) - elementLeft;
+    const offsetY = ((event.clientY - canvasRect.top) / factor) - elementTop;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
-      const newX = (moveEvent.clientX / factor) - offsetX;
-      const newY = (moveEvent.clientY / factor) - offsetY;
+      const newX = ((moveEvent.clientX - canvasRect.left) / factor) - offsetX;
+      const newY = ((moveEvent.clientY - canvasRect.top) / factor) - offsetY;
       element.style.left = `${newX}px`;
       element.style.top = `${newY}px`;
       data.left = newX;
       data.top = newY;
     };
 
-
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
-
-    
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     event.preventDefault();
@@ -255,7 +251,6 @@ export class CanvasEditorComponent implements OnInit {
 
   toggleSize(event: MouseEvent): void {
     const element = event.target as HTMLElement;
-
     element.classList.toggle('expanded');
   }
 
@@ -263,5 +258,3 @@ export class CanvasEditorComponent implements OnInit {
     this.modalService.openModal('text');
   }
 }
-
-
